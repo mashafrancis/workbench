@@ -5,6 +5,13 @@ All notable changes to Workbench will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-05-24
+
+### Fixed
+
+- `@getworkbench/core` now declares `hono` as a runtime `dependency` instead of a `peerDependency`. Non-Hono adapters (`express`, `fastify`, `nestjs`, `elysia`, `next`) previously failed at import time with `ERR_MODULE_NOT_FOUND: Cannot find package 'hono'` in environments where the package manager did not auto-install peer deps (strict pnpm, certain Docker images, hoisting-disabled monorepos). Hono is a private implementation detail of core's API engine and is now always installed transitively.
+- All adapters and the CLI bumped to `0.2.1` so users picking up `@getworkbench/<adapter>@latest` get the corrected `core@0.2.1`.
+
 ## [0.2.0] - 2026-05-24
 
 ### Added

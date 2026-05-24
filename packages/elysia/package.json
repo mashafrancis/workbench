@@ -1,6 +1,6 @@
 {
   "name": "@getworkbench/elysia",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Elysia adapter for Workbench — drop-in BullMQ dashboard.",
   "type": "module",
   "main": "./dist/index.js",
