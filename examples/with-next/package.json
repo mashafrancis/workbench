@@ -1,0 +1,29 @@
+{
+  "name": "example-with-next",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k -n web,worker -c cyan,magenta \"next dev -p ${PORT:-3000}\" \"tsx watch scripts/worker.ts\"",
+    "web": "next dev",
+    "worker": "tsx watch scripts/worker.ts",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@getworkbench/next": "workspace:*",
+    "bullmq": "^5.71.1",
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "concurrently": "^9.1.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

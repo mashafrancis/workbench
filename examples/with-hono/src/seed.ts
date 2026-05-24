@@ -24,8 +24,8 @@ import {
   pick,
   QUEUE_NAMES,
   QUEUE_PROFILES,
-  sampleDuration,
   type QueueName,
+  sampleDuration,
 } from "./fixtures";
 
 const REDIS_URL = process.env.REDIS_URL ?? "redis://localhost:6379";
@@ -92,7 +92,10 @@ async function backfillHistory(redis: IORedis): Promise<void> {
       const id = await nextJobId(redis, queueName);
       const finishedOn = Math.floor(sampleFinishedOn(now));
       const duration = sampleDuration(profile.medianMs, profile.tailMs);
-      const waitTime = sampleDuration(profile.medianWaitMs, profile.medianWaitMs * 8);
+      const waitTime = sampleDuration(
+        profile.medianWaitMs,
+        profile.medianWaitMs * 8,
+      );
       const processedOn = finishedOn - duration;
       const timestamp = processedOn - waitTime;
       const jobName = pick(JOB_NAMES[queueName]);
@@ -101,7 +104,10 @@ async function backfillHistory(redis: IORedis): Promise<void> {
       pipeline.hset(`bull:${queueName}:${id}`, {
         name: jobName,
         data: JSON.stringify(data),
-        opts: JSON.stringify({ attempts: 3, backoff: { type: "exponential", delay: 500 } }),
+        opts: JSON.stringify({
+          attempts: 3,
+          backoff: { type: "exponential", delay: 500 },
+        }),
         timestamp: String(timestamp),
         delay: "0",
         priority: "0",
@@ -119,7 +125,10 @@ async function backfillHistory(redis: IORedis): Promise<void> {
       const finishedOn = Math.floor(sampleFinishedOn(now));
       // Failures tend to be slightly slower on average (retries / timeouts).
       const duration = sampleDuration(profile.medianMs * 1.4, profile.tailMs);
-      const waitTime = sampleDuration(profile.medianWaitMs, profile.medianWaitMs * 8);
+      const waitTime = sampleDuration(
+        profile.medianWaitMs,
+        profile.medianWaitMs * 8,
+      );
       const processedOn = finishedOn - duration;
       const timestamp = processedOn - waitTime;
       const jobName = pick(JOB_NAMES[queueName]);
@@ -130,7 +139,10 @@ async function backfillHistory(redis: IORedis): Promise<void> {
       pipeline.hset(`bull:${queueName}:${id}`, {
         name: jobName,
         data: JSON.stringify(data),
-        opts: JSON.stringify({ attempts: 3, backoff: { type: "exponential", delay: 500 } }),
+        opts: JSON.stringify({
+          attempts: 3,
+          backoff: { type: "exponential", delay: 500 },
+        }),
         timestamp: String(timestamp),
         delay: "0",
         priority: "0",
@@ -167,7 +179,10 @@ async function seedLiveState(): Promise<void> {
       return {
         name,
         data: PAYLOAD[queueName](name),
-        opts: { attempts: 3, backoff: { type: "exponential" as const, delay: 500 } },
+        opts: {
+          attempts: 3,
+          backoff: { type: "exponential" as const, delay: 500 },
+        },
       };
     });
     await queue.addBulk(waiting);

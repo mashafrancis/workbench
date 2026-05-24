@@ -1,7 +1,17 @@
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
-
+export {
+  createFetchHandler,
+  type FetchHandlerResult,
+} from "./api/fetch-handler";
+export {
+  buildRouteTable,
+  type Handler,
+  type HandlerInput,
+  type HandlerResult,
+  type HttpMethod,
+  type RouteDef,
+} from "./api/handlers";
 export { createApiRoutes } from "./api/router";
+
 export { QueueManager } from "./core/queue-manager";
 export type {
   ActivityBucket,
@@ -36,9 +46,17 @@ export type {
   WorkerInfo,
 } from "./core/types";
 export { WorkbenchCore } from "./core/workbench";
+export { computeBasePath, resolveBasePath } from "./server/base-path";
+export {
+  BASIC_AUTH_CHALLENGE,
+  checkBasicAuth,
+} from "./server/basic-auth";
+export { buildWorkbenchApp } from "./server/hono-app";
+export {
+  type IndexHtmlResult,
+  renderIndexHtml,
+  type StaticAssetResult,
+  serveStaticAsset,
+} from "./server/static-assets";
 
-/**
- * Absolute filesystem path to the bundled UI assets (index.html + /assets).
- * Adapters should serve static files from this directory.
- */
-export const UI_DIST_PATH = join(dirname(fileURLToPath(import.meta.url)), "ui");
+export { UI_DIST_PATH } from "./ui-dist";

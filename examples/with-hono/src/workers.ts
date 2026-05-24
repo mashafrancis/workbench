@@ -17,8 +17,8 @@ import {
   pick,
   QUEUE_NAMES,
   QUEUE_PROFILES,
-  sampleDuration,
   type QueueName,
+  sampleDuration,
 } from "./fixtures";
 
 const REDIS_URL = process.env.REDIS_URL ?? "redis://localhost:6379";
@@ -41,7 +41,10 @@ async function startTrickle(queue: Queue, queueName: QueueName): Promise<void> {
         return {
           name,
           data: PAYLOAD[queueName](name),
-          opts: { attempts: 3, backoff: { type: "exponential" as const, delay: 500 } },
+          opts: {
+            attempts: 3,
+            backoff: { type: "exponential" as const, delay: 500 },
+          },
         };
       });
       await queue.addBulk(jobs);

@@ -1,6 +1,6 @@
 {
   "name": "@getworkbench/core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Core of Workbench — QueueManager, API router, and bundled UI.",
   "type": "module",
   "main": "./dist/index.js",

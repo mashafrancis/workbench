@@ -33,7 +33,12 @@ export const QUEUE_PROFILES: Record<
   email: { medianMs: 220, tailMs: 1200, failRate: 0.02, medianWaitMs: 120 },
   invoice: { medianMs: 1500, tailMs: 8000, failRate: 0.015, medianWaitMs: 400 },
   webhooks: { medianMs: 420, tailMs: 30000, failRate: 0.08, medianWaitMs: 250 },
-  reports: { medianMs: 12000, tailMs: 60000, failRate: 0.04, medianWaitMs: 600 },
+  reports: {
+    medianMs: 12000,
+    tailMs: 60000,
+    failRate: 0.04,
+    medianWaitMs: 600,
+  },
   "image-processing": {
     medianMs: 1200,
     tailMs: 8000,
@@ -100,7 +105,10 @@ export const JOB_NAMES: Record<QueueName, string[]> = {
 };
 
 /** Realistic errors per queue. */
-export const ERRORS: Record<QueueName, Array<{ message: string; stack: string[] }>> = {
+export const ERRORS: Record<
+  QueueName,
+  Array<{ message: string; stack: string[] }>
+> = {
   email: [
     {
       message: "SMTPTimeoutError: connection to smtp.mailgun.com:587 timed out",
@@ -198,7 +206,8 @@ export const ERRORS: Record<QueueName, Array<{ message: string; stack: string[] 
   ],
   "image-processing": [
     {
-      message: "Sharp: VIPS error — corrupt JPEG data, premature end of segment",
+      message:
+        "Sharp: VIPS error — corrupt JPEG data, premature end of segment",
       stack: [
         "at Sharp.toBuffer (/app/node_modules/sharp/lib/output.js:88:11)",
         "at async resize (/app/src/images/resize.ts:22:19)",
@@ -235,16 +244,50 @@ export const ERRORS: Record<QueueName, Array<{ message: string; stack: string[] 
 // ─────────────────────────────────────────────────────────────────────────────
 
 const FIRST_NAMES = [
-  "Ava", "Liam", "Noah", "Emma", "Olivia", "Sofia", "Mateo", "Zara", "Kai",
-  "Isla", "Theo", "Mila", "Jude", "Freya", "Hugo", "Nora", "Ezra", "Lara",
+  "Ava",
+  "Liam",
+  "Noah",
+  "Emma",
+  "Olivia",
+  "Sofia",
+  "Mateo",
+  "Zara",
+  "Kai",
+  "Isla",
+  "Theo",
+  "Mila",
+  "Jude",
+  "Freya",
+  "Hugo",
+  "Nora",
+  "Ezra",
+  "Lara",
 ];
 const LAST_NAMES = [
-  "Nguyen", "Patel", "García", "Kowalski", "Sørensen", "Okafor", "Tanaka",
-  "Müller", "Rossi", "Kim", "Bergström", "Fischer", "Costa", "Haddad",
+  "Nguyen",
+  "Patel",
+  "García",
+  "Kowalski",
+  "Sørensen",
+  "Okafor",
+  "Tanaka",
+  "Müller",
+  "Rossi",
+  "Kim",
+  "Bergström",
+  "Fischer",
+  "Costa",
+  "Haddad",
 ];
 const DOMAINS = [
-  "acme.co", "initech.io", "globex.com", "hooli.xyz", "pied-piper.dev",
-  "stark.industries", "wayne.enterprises", "umbrella.corp",
+  "acme.co",
+  "initech.io",
+  "globex.com",
+  "hooli.xyz",
+  "pied-piper.dev",
+  "stark.industries",
+  "wayne.enterprises",
+  "umbrella.corp",
 ];
 
 function pick<T>(arr: readonly T[]): T {
@@ -266,7 +309,9 @@ function randomId(prefix: string): string {
 
 function randomEmail(): string {
   const first = pick(FIRST_NAMES).toLowerCase();
-  const last = pick(LAST_NAMES).toLowerCase().replace(/[^a-z]/g, "");
+  const last = pick(LAST_NAMES)
+    .toLowerCase()
+    .replace(/[^a-z]/g, "");
   const domain = pick(DOMAINS);
   return `${first}.${last}@${domain}`;
 }
@@ -280,10 +325,15 @@ function randomUrl(host: string): string {
 }
 
 function recentIso(withinMs: number): string {
-  return new Date(Date.now() - Math.floor(Math.random() * withinMs)).toISOString();
+  return new Date(
+    Date.now() - Math.floor(Math.random() * withinMs),
+  ).toISOString();
 }
 
-export const PAYLOAD: Record<QueueName, (jobName: string) => Record<string, unknown>> = {
+export const PAYLOAD: Record<
+  QueueName,
+  (jobName: string) => Record<string, unknown>
+> = {
   email: (name) => ({
     to: randomEmail(),
     from: "no-reply@getworkbench.dev",
@@ -311,12 +361,14 @@ export const PAYLOAD: Record<QueueName, (jobName: string) => Record<string, unkn
   webhooks: (name) => ({
     event: name,
     deliveryId: randomId("whd"),
-    endpoint: randomUrl(pick([
-      "hooks.slack.com",
-      "api.stripe.com",
-      "api.github.com",
-      "hooks.zapier.com",
-    ])),
+    endpoint: randomUrl(
+      pick([
+        "hooks.slack.com",
+        "api.stripe.com",
+        "api.github.com",
+        "hooks.zapier.com",
+      ]),
+    ),
     attempt: 1 + Math.floor(Math.random() * 3),
     size: Math.floor(256 + Math.random() * 8192),
   }),

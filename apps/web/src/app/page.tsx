@@ -1,9 +1,11 @@
 import { CopyCommand } from "../components/copy-command";
 import {
+  ElysiaLogo,
   ExpressLogo,
   FastifyLogo,
   HonoLogo,
   HyperLogo,
+  NestjsLogo,
   NextLogo,
 } from "../components/logos";
 
@@ -12,8 +14,10 @@ const INSTALL_COMMAND = "npx @getworkbench/cli init";
 
 const frameworks = [
   { name: "Hono", Logo: HonoLogo },
+  { name: "Elysia", Logo: ElysiaLogo },
   { name: "Express", Logo: ExpressLogo },
   { name: "Fastify", Logo: FastifyLogo },
+  { name: "NestJS", Logo: NestjsLogo },
   { name: "Next.js", Logo: NextLogo },
   { name: "Hyper", Logo: HyperLogo },
 ];
@@ -40,8 +44,8 @@ export default function Page() {
           <div className="hero-glow" aria-hidden />
           <h1 className="hero-headline mx-auto max-w-5xl text-balance text-5xl font-bold leading-[1.02] sm:text-6xl md:text-7xl lg:text-8xl">
             a <span className="hero-italic">beautiful</span>, open-source{" "}
-            <span className="hero-fill">BullMQ</span> dashboard for modern
-            Node apps.
+            <span className="hero-fill">BullMQ</span> dashboard for modern Node
+            apps.
           </h1>
         </div>
 

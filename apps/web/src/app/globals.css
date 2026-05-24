@@ -66,11 +66,10 @@ body {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background:
-    radial-gradient(
-      ellipse 60% 55% at 50% 50%,
-      rgba(250, 250, 250, 0.08),
-      transparent 70%
-    );
+  background: radial-gradient(
+    ellipse 60% 55% at 50% 50%,
+    rgba(250, 250, 250, 0.08),
+    transparent 70%
+  );
   filter: blur(40px);
 }
