@@ -2,7 +2,7 @@
 
 Open-source BullMQ dashboard. Drop-in for any Node backend.
 
-Workbench is a modern, Trigger.dev-inspired dashboard for [BullMQ](https://docs.bullmq.io/). Runs jobs, flows, schedulers and metrics, all served from your own backend behind your own auth.
+Workbench is a modern dashboard for [BullMQ](https://docs.bullmq.io/). Runs jobs, flows, schedulers and metrics, all served from your own backend behind your own auth.
 
 - Zero infrastructure — mounts as a route in your existing Hono app
 - Flows & DAG view, metrics, schedulers, search
