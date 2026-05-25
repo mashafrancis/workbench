@@ -1297,7 +1297,7 @@ export class QueueManager {
     // We need enough to fill the page after sorting by timestamp
     const perQueueFetch = Math.max(5, Math.ceil((limit + 10) / numQueues) + 2);
 
-    // Fetch from all queues in parallel - single call per queue with all types
+    // Fetch from all queues in parallel and keep the originating state.
     const allTypes: JobStatus[] = [
       "active",
       "waiting",
@@ -1310,9 +1310,13 @@ export class QueueManager {
 
     const results = await Promise.all(
       queueEntries.map(async ([queueName, queue]) => {
-        // Single getJobs call with all types - much faster than 5 separate calls
-        const jobs = await queue.getJobs(allTypes as any, 0, perQueueFetch);
-        return jobs.map((job) => ({ job, queueName }));
+        const jobArrays = await Promise.all(
+          allTypes.map(async (type) => {
+            const jobs = await queue.getJobs(type as any, 0, perQueueFetch);
+            return jobs.map((job) => ({ job, queueName, state: type }));
+          }),
+        );
+        return jobArrays.flat();
       }),
     );
 
@@ -1328,19 +1332,9 @@ export class QueueManager {
     // Apply pagination
     const jobsToConvert = allJobs.slice(start, start + limit);
 
-    // Convert to RunInfoList - infer state from job properties
+    // Convert to RunInfoList with the known state from the source list.
     const runInfos = await Promise.all(
-      jobsToConvert.map(async ({ job, queueName }) => {
-        // Infer state from job properties to avoid getState() Redis call
-        let state: JobStatus = "waiting";
-        if (job.finishedOn) {
-          state = job.failedReason ? "failed" : "completed";
-        } else if (job.processedOn) {
-          state = "active";
-        } else if (job.delay && job.delay > 0) {
-          state = "delayed";
-        }
-
+      jobsToConvert.map(async ({ job, queueName, state }) => {
         const info = await this.jobToInfo(job, "list", state);
         return { ...info, queueName } as RunInfoList;
       }),
@@ -2098,7 +2092,6 @@ export class QueueManager {
             const otherTypes = [
               "active",
               "waiting",
-              "waiting-children",
               "prioritized",
               "completed",
               "failed",
