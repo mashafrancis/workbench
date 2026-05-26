@@ -5,6 +5,12 @@ All notable changes to Workbench will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.1] - 2026-05-26
+
+### Added
+
+- **`@getworkbench/mcp`** — new optional [Model Context Protocol](https://modelcontextprotocol.io) server that lets Cursor, Claude Desktop, Zed, Continue.dev, and any other MCP-aware agent inspect, debug, and operate BullMQ queues through a running Workbench dashboard. Ships 18 tools across two intents: **inspect** (`workbench_get_overview`, `list_queues`, `get_quick_counts`, `get_metrics`, `get_activity`, `list_jobs`, `list_runs`, `get_job`, `search_jobs`, `list_schedulers`, `list_flows`, `get_flow`, `list_tag_values`) and **operate** (`workbench_retry_job`, `remove_job`, `promote_job`, `pause_queue`, `resume_queue`, `run_scheduler_now`, `enqueue_job`, `clean_jobs`, `bulk_retry`, `bulk_delete`). Every read tool sets `readOnlyHint: true` so clients can auto-approve them; every write tool sets `destructiveHint: true` so clients prompt the user first. Runs over stdio via `npx @getworkbench/mcp`, configured with three env vars (`WORKBENCH_URL` required; `WORKBENCH_USERNAME` + `WORKBENCH_PASSWORD` or `WORKBENCH_TOKEN` optional). The MCP is a thin HTTP proxy to the dashboard — it inherits the dashboard's auth and `readonly` flag rather than reintroducing its own permission model, so a `403` from `readonly: true` propagates back to the agent as an actionable error. Zero new dependencies on `@getworkbench/core`; deliberately lightweight so it adds nothing to existing installs that don't opt in.
+
 ## [0.5.0] - 2026-05-26
 
 ### Added
