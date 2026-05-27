@@ -5,6 +5,23 @@ All notable changes to Workbench will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-05-27
+
+### Added
+
+- **`@getworkbench/core`** Overview is now the default home (`/`): fleet KPI cards, 24h throughput chart, attention alerts (worker health, paused queues, failed backlog), and per-queue health cards with sparklines and worker counts.
+- **`@getworkbench/core`** collapsible shadcn sidebar with icon rail mode, `SidebarTrigger`, and `⌘B` toggle; queue list stays inline when expanded and in a HoverCard when collapsed.
+- **`@getworkbench/core`** targeted shadcn primitives — `Alert`, `AlertDialog`, and Sonner toasts — for attention blocks, destructive confirms, and op feedback.
+- **`@getworkbench/core`** queue **Clean completed/failed** action (DropdownMenu → AlertDialog confirm with grace period → toast).
+- **`@getworkbench/core`** Runs list shows truncated `failedReason` on failed rows; list API payload trimmed via `jobToInfo(..., "list")`.
+- **`@getworkbench/core`** live cues: header sync timestamp with pulse when jobs are active; active job progress bar; **Live** badge on the Logs tab.
+
+### Changed
+
+- **`@getworkbench/core`** Runs moves to `/runs` (Overview replaces it at `/`). Command palette and sidebar nav updated accordingly.
+- **`@getworkbench/core`** `QueueInfo` now includes optional `workerCount` from BullMQ `getWorkersCount()`.
+- All 12 publishable adapter packages bump together to `0.6.0`. `@getworkbench/cli` stays at `0.4.0`; `@getworkbench/mcp` stays at `0.5.1`.
+
 ## [0.5.2] - 2026-05-27
 
 ### Added

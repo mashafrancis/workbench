@@ -5,6 +5,7 @@ import {
   FileText,
   FlaskConical,
   Layers,
+  LayoutDashboard,
   Moon,
   Network,
   RefreshCw,
@@ -48,9 +49,16 @@ interface NavigationItem {
 
 const navigationItems: NavigationItem[] = [
   {
+    id: "overview",
+    label: "Overview",
+    path: "/",
+    icon: <LayoutDashboard className="h-4 w-4" />,
+    keywords: ["overview", "home", "dashboard", "command center"],
+  },
+  {
     id: "runs",
     label: "Runs",
-    path: "/",
+    path: "/runs",
     icon: <FileText className="h-4 w-4" />,
     keywords: ["runs", "jobs", "all"],
   },

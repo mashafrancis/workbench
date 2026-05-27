@@ -1,6 +1,6 @@
 {
   "name": "@getworkbench/bun",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Bun.serve adapter for Workbench — drop-in BullMQ dashboard.",
   "type": "module",
   "main": "./dist/index.js",

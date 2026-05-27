@@ -541,6 +541,14 @@ function RunRow({
           <div className="truncate font-mono text-xs text-muted-foreground">
             {truncate(run.id, 24)}
           </div>
+          {run.status === "failed" && run.failedReason && (
+            <div
+              className="truncate text-xs text-status-error"
+              title={run.failedReason}
+            >
+              {truncate(run.failedReason, 80)}
+            </div>
+          )}
         </div>
       </div>
       <div className="col-span-2">

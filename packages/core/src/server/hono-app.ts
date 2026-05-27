@@ -4,7 +4,11 @@ import { cors } from "hono/cors";
 import { createApiRoutes } from "../api/router";
 import type { WorkbenchCore } from "../core/workbench";
 import { resolveBasePath } from "./base-path";
-import { renderIndexHtml, serveStaticAsset, serveUiFile } from "./static-assets";
+import {
+  renderIndexHtml,
+  serveStaticAsset,
+  serveUiFile,
+} from "./static-assets";
 
 /**
  * Build a fully-wired Hono app for Workbench:

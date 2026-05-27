@@ -61,14 +61,32 @@ function isBundledAppIcon(src: string): boolean {
 }
 
 /**
+ * Wordmark as rendered on getworkbench.dev nav (mono, lowercase).
+ */
+export function WorkbenchWordmark({ className }: { className?: string }) {
+  return (
+    <span
+      className={cn(
+        "font-mono text-sm lowercase tracking-tight text-foreground",
+        className,
+      )}
+    >
+      workbench
+    </span>
+  );
+}
+
+/**
  * Sidebar logo: React icon by default, `<img>` only for custom external URLs.
  */
 export function WorkbenchLogo({
   src,
   className,
+  showWordmark = false,
 }: {
   src?: string;
   className?: string;
+  showWordmark?: boolean;
 }) {
   if (src && !isBundledAppIcon(src)) {
     return (
@@ -80,5 +98,10 @@ export function WorkbenchLogo({
     );
   }
 
-  return <WorkbenchIcon className={cn("h-5 w-5", className)} />;
+  return (
+    <div className={cn("flex shrink-0 items-center gap-2", className)}>
+      <WorkbenchIcon className="h-5 w-5 shrink-0" />
+      {showWordmark && <WorkbenchWordmark className="truncate" />}
+    </div>
+  );
 }

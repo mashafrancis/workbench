@@ -1,6 +1,15 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { ChevronRight, FileText, Pause, Play, RefreshCw } from "lucide-react";
+import {
+  ChevronRight,
+  FileText,
+  MoreHorizontal,
+  Pause,
+  Play,
+  RefreshCw,
+  Trash2,
+} from "lucide-react";
 import * as React from "react";
+import { toast } from "sonner";
 import {
   BulkBottomBar,
   type BulkSelection,
@@ -9,15 +18,33 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { RelativeTime } from "@/components/shared/relative-time";
 import { SortableHeader, useSort } from "@/components/shared/sortable-header";
 import { StatusBadge } from "@/components/shared/status-badge";
+import { StatusFilterTabs } from "@/components/shared/status-filter-tabs";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import type { JobInfo, JobStatus } from "@/core/types";
 import {
   useBulkDelete,
   useBulkPromote,
   useBulkRetry,
+  useCleanQueue,
   useJobs,
   usePauseQueue,
   useQueues,
@@ -29,29 +56,25 @@ import type { QueueSearch } from "@/router";
 
 interface QueuePageProps {
   queueName: string;
+  readonly?: boolean;
   search: QueueSearch;
   onSearchChange: (search: QueueSearch) => void;
   onJobSelect: (jobId: string) => void;
 }
 
-const statusTabs: { value: JobStatus | "all"; label: string }[] = [
-  { value: "all", label: "All" },
-  { value: "active", label: "Active" },
-  { value: "waiting", label: "Waiting" },
-  { value: "waiting-children", label: "Waiting Children" },
-  { value: "prioritized", label: "Prioritized" },
-  { value: "completed", label: "Completed" },
-  { value: "failed", label: "Failed" },
-  { value: "delayed", label: "Delayed" },
-];
-
 export function QueuePage({
   queueName,
+  readonly,
   search,
   onSearchChange,
   onJobSelect,
 }: QueuePageProps) {
   const _queryClient = useQueryClient();
+  const [cleanTarget, setCleanTarget] = React.useState<
+    "completed" | "failed" | null
+  >(null);
+  const [graceMs, setGraceMs] = React.useState("0");
+  const cleanQueue = useCleanQueue();
 
   // Selection state for bulk actions
   const [selection, setSelection] = React.useState<Map<string, BulkSelection>>(
@@ -184,23 +207,33 @@ export function QueuePage({
     clearSelection();
   };
 
+  const handleConfirmClean = async () => {
+    if (!cleanTarget) return;
+    const grace = Number.parseInt(graceMs, 10);
+    try {
+      const result = await cleanQueue.mutateAsync({
+        queueName,
+        status: cleanTarget,
+        grace: Number.isNaN(grace) ? 0 : grace,
+      });
+      toast.success(
+        `Removed ${result.removed.toLocaleString()} ${cleanTarget} job${result.removed === 1 ? "" : "s"}`,
+      );
+      setCleanTarget(null);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Clean failed");
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Filters */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Tabs
+          <StatusFilterTabs
             value={search.status || "all"}
             onValueChange={handleStatusChange}
-          >
-            <TabsList>
-              {statusTabs.map((tab) => (
-                <TabsTrigger key={tab.value} value={tab.value}>
-                  {tab.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
+          />
 
           {isPaused && (
             <Badge
@@ -213,6 +246,26 @@ export function QueuePage({
         </div>
 
         <div className="flex items-center gap-2">
+          {!readonly && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <MoreHorizontal className="h-4 w-4" />
+                  <span className="sr-only">Queue actions</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onSelect={() => setCleanTarget("completed")}>
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Clean completed
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setCleanTarget("failed")}>
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Clean failed
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
           <Button
             variant={isPaused ? "default" : "outline"}
             size="sm"
@@ -393,6 +446,52 @@ export function QueuePage({
         isDeleting={bulkDelete.isPending}
         isPromoting={bulkPromote.isPending}
       />
+
+      <AlertDialog
+        open={cleanTarget != null}
+        onOpenChange={(open) => {
+          if (!open) setCleanTarget(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Clean {cleanTarget} jobs?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Permanently remove {cleanTarget} jobs from{" "}
+              <span className="font-mono">{queueName}</span>. This cannot be
+              undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="space-y-2">
+            <span className="text-sm font-medium">Grace period (ms)</span>
+            <Input
+              type="number"
+              min={0}
+              value={graceMs}
+              onChange={(e) => setGraceMs(e.target.value)}
+              placeholder="0"
+            />
+            <p className="text-xs text-muted-foreground">
+              Only remove jobs finished at least this many milliseconds ago.
+            </p>
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={cleanQueue.isPending}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              disabled={cleanQueue.isPending}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={(e) => {
+                e.preventDefault();
+                void handleConfirmClean();
+              }}
+            >
+              {cleanQueue.isPending ? "Cleaning..." : "Clean jobs"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

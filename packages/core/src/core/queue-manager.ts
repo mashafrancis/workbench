@@ -327,9 +327,10 @@ export class QueueManager {
       const queueEntries = Array.from(this.queues.entries());
       const results = await Promise.all(
         queueEntries.map(async ([name, queue]) => {
-          const [counts, isPaused] = await Promise.all([
+          const [counts, isPaused, workerCount] = await Promise.all([
             this.getCachedJobCounts(queue),
             queue.isPaused(),
+            queue.getWorkersCount().catch(() => null as number | null),
           ]);
 
           return {
@@ -345,6 +346,7 @@ export class QueueManager {
               paused: counts.paused || 0,
             },
             isPaused,
+            workerCount,
           };
         }),
       );
@@ -1937,7 +1939,7 @@ export class QueueManager {
    */
   private async jobToInfo(
     job: Job,
-    _fields: "list" | "full" = "full",
+    fields: "list" | "full" = "full",
     knownState?: JobStatus,
   ): Promise<JobInfo | RunInfoList> {
     // Use known state if provided (avoids expensive Redis getState() call)
@@ -1984,6 +1986,20 @@ export class QueueManager {
           queueName: parts[parts.length - 2] || "",
         };
       }
+    }
+
+    if (fields === "list") {
+      return {
+        id: job.id || "",
+        name: job.name,
+        queueName: job.queueName,
+        status: state as JobStatus,
+        processedOn: job.processedOn,
+        timestamp: job.timestamp,
+        duration,
+        tags,
+        failedReason: job.failedReason,
+      } satisfies RunInfoList;
     }
 
     return {

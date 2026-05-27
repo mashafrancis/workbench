@@ -1,192 +1,253 @@
-import { Activity, AlertCircle, CheckCircle, Layers } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import {
+  Activity,
+  AlertCircle,
+  AlertTriangle,
+  CheckCircle2,
+  TrendingUp,
+  Zap,
+} from "lucide-react";
+import { SummaryCard } from "@/components/metrics/summary-card";
+import { ThroughputChart } from "@/components/metrics/throughput-chart";
+import { AttentionAlerts } from "@/components/overview/attention-alerts";
+import {
+  metricsBucketsToSparkline,
+  QueueHealthCard,
+} from "@/components/overview/queue-health-card";
 import { EmptyState } from "@/components/shared/empty-state";
-import { useOverview } from "@/lib/hooks";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useMetrics, useOverview } from "@/lib/hooks";
 
 interface OverviewPageProps {
   onQueueSelect: (queue: string) => void;
+  onViewFailed: (queue: string) => void;
 }
 
-export function OverviewPage({ onQueueSelect }: OverviewPageProps) {
-  const { data, isLoading, error } = useOverview();
+function formatPercentage(value: number): string {
+  return `${(value * 100).toFixed(1)}%`;
+}
 
-  if (isLoading && !data) {
-    return (
-      <div className="space-y-6">
-        {/* Stats Grid Skeleton */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => (
-            <div key={i.toString()} className="p-4 border bg-card">
-              <div className="flex items-center justify-between mb-2">
-                <div className="h-4 w-16 animate-pulse rounded bg-muted" />
-                <div className="h-4 w-4 animate-pulse rounded bg-muted" />
-              </div>
-              <div className="h-8 w-20 animate-pulse rounded bg-muted mb-1" />
-              <div className="h-3 w-12 animate-pulse rounded bg-muted" />
-            </div>
-          ))}
-        </div>
-        {/* Queues Grid Skeleton */}
-        <div>
-          <div className="h-5 w-16 animate-pulse rounded bg-muted mb-4" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[...Array(6)].map((_, i) => (
-              <div key={i.toString()} className="p-4 border bg-card">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="h-5 w-24 animate-pulse rounded bg-muted" />
-                </div>
-                <div className="grid grid-cols-3 gap-2">
-                  {[...Array(3)].map((__, j) => (
-                    <div key={j.toString()}>
-                      <div className="h-3 w-12 animate-pulse rounded bg-muted mb-1" />
-                      <div className="h-5 w-8 animate-pulse rounded bg-muted" />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <EmptyState
-        icon={AlertCircle}
-        title="Failed to load overview"
-        description={error.message}
-      />
-    );
-  }
-
-  if (!data) return null;
-
+function OverviewSkeleton() {
   return (
     <div className="space-y-6">
-      {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          title="Total Jobs"
-          value={data.totalJobs.toLocaleString()}
-          description="In queue"
-          icon={Layers}
-        />
-        <StatCard
-          title="Active"
-          value={data.activeJobs.toLocaleString()}
-          description="Currently processing"
-          icon={Activity}
-          accent="warning"
-        />
-        <StatCard
-          title="Failed"
-          value={data.failedJobs.toLocaleString()}
-          description="Need attention"
-          icon={AlertCircle}
-          accent={data.failedJobs > 0 ? "destructive" : undefined}
-        />
-        <StatCard
-          title="Completed"
-          value={data.completedToday.toLocaleString()}
-          description="Today"
-          icon={CheckCircle}
-          accent="success"
-        />
+        {[...Array(4)].map((_, i) => (
+          <div key={i.toString()} className="border border-dashed bg-card p-4">
+            <Skeleton className="h-4 w-20 mb-3" />
+            <Skeleton className="h-8 w-24 mb-2" />
+            <Skeleton className="h-3 w-16" />
+          </div>
+        ))}
       </div>
-
-      {/* Queues Grid */}
-      <div>
-        <h3 className="font-medium mb-4">Queues</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {data.queues.map((queue) => (
-            <button
-              type="button"
-              key={queue.name}
-              onClick={() => onQueueSelect(queue.name)}
-              className="text-left p-4 border bg-card hover:bg-accent transition-colors min-w-0"
-            >
-              <div className="flex items-center justify-between gap-2 mb-3 min-w-0">
-                <span
-                  className="font-mono font-medium truncate min-w-0"
-                  title={queue.name}
-                >
-                  {queue.name}
-                </span>
-                {queue.isPaused && (
-                  <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 shrink-0">
-                    Paused
-                  </span>
-                )}
-              </div>
-              <div className="grid grid-cols-3 gap-2 text-sm">
-                <div>
-                  <div className="text-muted-foreground text-xs">Waiting</div>
-                  <div className="font-medium">{queue.counts.waiting}</div>
-                </div>
-                <div>
-                  <div className="text-muted-foreground text-xs">Active</div>
-                  <div className="font-medium text-warning">
-                    {queue.counts.active}
-                  </div>
-                </div>
-                <div>
-                  <div className="text-muted-foreground text-xs">Failed</div>
-                  <div
-                    className={cn(
-                      "font-medium",
-                      queue.counts.failed > 0 && "text-destructive",
-                    )}
-                  >
-                    {queue.counts.failed}
-                  </div>
-                </div>
-              </div>
-            </button>
-          ))}
-        </div>
+      <div className="border border-dashed bg-card p-4">
+        <Skeleton className="h-4 w-32 mb-4" />
+        <Skeleton className="h-40 w-full" />
+      </div>
+      <Skeleton className="h-24 w-full" />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {[...Array(6)].map((_, i) => (
+          <div key={i.toString()} className="border bg-card p-4">
+            <Skeleton className="h-5 w-28 mb-3" />
+            <Skeleton className="h-7 w-full mb-3" />
+            <div className="grid grid-cols-4 gap-2">
+              {[...Array(4)].map((__, j) => (
+                <Skeleton key={j.toString()} className="h-10" />
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
 }
 
-interface StatCardProps {
-  title: string;
-  value: string;
-  description: string;
-  icon: React.ElementType;
-  accent?: "success" | "warning" | "destructive";
-}
+export function OverviewPage({
+  onQueueSelect,
+  onViewFailed,
+}: OverviewPageProps) {
+  const {
+    data: overview,
+    isLoading: overviewLoading,
+    error: overviewError,
+  } = useOverview();
+  const { data: metrics, isLoading: metricsLoading } = useMetrics();
 
-function StatCard({
-  title,
-  value,
-  description,
-  icon: Icon,
-  accent,
-}: StatCardProps) {
-  const accentClasses = {
-    success: "text-success",
-    warning: "text-warning",
-    destructive: "text-destructive",
-  };
+  if (overviewLoading && !overview) {
+    return <OverviewSkeleton />;
+  }
+
+  if (overviewError) {
+    return (
+      <EmptyState
+        icon={AlertCircle}
+        title="Failed to load overview"
+        description={overviewError.message}
+      />
+    );
+  }
+
+  if (!overview) return null;
+
+  if (overview.queues.length === 0) {
+    return (
+      <EmptyState
+        icon={Activity}
+        title="No queues discovered"
+        description="Connect Workbench to a Redis instance with BullMQ queues, or pass Queue instances when mounting the dashboard."
+        action={
+          <Button variant="outline" size="sm" asChild>
+            <a
+              href="https://getworkbench.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Read the docs
+            </a>
+          </Button>
+        }
+      />
+    );
+  }
+
+  const metricsByQueue = new Map(
+    metrics?.queues.map((q) => [q.queueName, q]) ?? [],
+  );
+
+  const aggregate = metrics?.aggregate;
+  const buckets = aggregate?.buckets ?? [];
+  const summary = aggregate?.summary;
+
+  const midpoint = Math.floor(buckets.length / 2);
+  const firstHalf = buckets.slice(0, midpoint);
+  const secondHalf = buckets.slice(midpoint);
+  const firstHalfCompleted = firstHalf.reduce((sum, b) => sum + b.completed, 0);
+  const secondHalfCompleted = secondHalf.reduce(
+    (sum, b) => sum + b.completed,
+    0,
+  );
+  const firstHalfFailed = firstHalf.reduce((sum, b) => sum + b.failed, 0);
+  const secondHalfFailed = secondHalf.reduce((sum, b) => sum + b.failed, 0);
+  const throughputSparkline = buckets.map((b) => b.completed + b.failed);
+  const errorSparkline = buckets.map((b) =>
+    b.completed + b.failed > 0 ? b.failed / (b.completed + b.failed) : 0,
+  );
 
   return (
-    <div className="p-4 border bg-card">
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-sm text-muted-foreground">{title}</span>
-        <Icon className="h-4 w-4 text-muted-foreground" />
-      </div>
-      <div
-        className={cn(
-          "text-2xl font-semibold",
-          accent && accentClasses[accent],
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {metricsLoading || !summary ? (
+          [...Array(4)].map((_, i) => (
+            <div
+              key={i.toString()}
+              className="border border-dashed bg-card p-4"
+            >
+              <Skeleton className="h-4 w-20 mb-3" />
+              <Skeleton className="h-8 w-24" />
+            </div>
+          ))
+        ) : (
+          <>
+            <SummaryCard
+              title="Throughput"
+              value={summary.throughputPerHour.toLocaleString()}
+              subtitle="jobs/hour avg"
+              sparklineData={throughputSparkline}
+              icon={<TrendingUp className="h-4 w-4" />}
+              trend={{
+                current: secondHalfCompleted + secondHalfFailed,
+                previous: firstHalfCompleted + firstHalfFailed,
+                higherIsBetter: true,
+              }}
+            />
+            <SummaryCard
+              title="Error rate"
+              value={formatPercentage(summary.errorRate)}
+              subtitle={`${summary.totalFailed} failed (24h)`}
+              sparklineData={errorSparkline}
+              sparklineColor={summary.errorRate > 0.1 ? "danger" : "success"}
+              icon={<AlertTriangle className="h-4 w-4" />}
+              trend={{
+                current: secondHalfFailed,
+                previous: firstHalfFailed,
+                higherIsBetter: false,
+              }}
+            />
+            <SummaryCard
+              title="Active now"
+              value={overview.activeJobs.toLocaleString()}
+              subtitle="processing"
+              icon={<Zap className="h-4 w-4" />}
+            />
+            <SummaryCard
+              title="Failed in queues"
+              value={overview.failedJobs.toLocaleString()}
+              subtitle="need review"
+              sparklineColor="danger"
+              icon={<AlertCircle className="h-4 w-4" />}
+            />
+          </>
         )}
-      >
-        {value}
       </div>
-      <div className="text-xs text-muted-foreground mt-1">{description}</div>
+
+      {metricsLoading || buckets.length === 0 ? (
+        <div className="border border-dashed bg-card p-4">
+          <Skeleton className="h-4 w-32 mb-4" />
+          <Skeleton className="h-40 w-full" />
+        </div>
+      ) : (
+        <ThroughputChart buckets={buckets} />
+      )}
+
+      <AttentionAlerts
+        queues={overview.queues}
+        onQueueSelect={onQueueSelect}
+        onViewFailed={onViewFailed}
+      />
+
+      <div>
+        <div className="mb-4 flex items-center justify-between gap-4">
+          <h3 className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            Queues
+          </h3>
+          <Button
+            variant="link"
+            size="sm"
+            className="h-auto p-0 text-xs"
+            asChild
+          >
+            <Link to="/metrics">View full metrics →</Link>
+          </Button>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {overview.queues.map((queue) => {
+            const queueMetrics = metricsByQueue.get(queue.name);
+            const sparkline = queueMetrics
+              ? metricsBucketsToSparkline(queueMetrics.buckets)
+              : undefined;
+
+            return (
+              <QueueHealthCard
+                key={queue.name}
+                queue={queue}
+                sparklineData={sparkline}
+                onSelect={() => onQueueSelect(queue.name)}
+                onFailedClick={() => onViewFailed(queue.name)}
+              />
+            );
+          })}
+        </div>
+      </div>
+
+      {overview.activeJobs === 0 &&
+        overview.failedJobs === 0 &&
+        overview.totalJobs === 0 && (
+          <div className="flex items-center gap-2 border border-dashed bg-card px-4 py-3 text-sm text-muted-foreground">
+            <CheckCircle2 className="h-4 w-4 text-chart-success shrink-0" />
+            All queues are empty — enqueue a test job from the Test page to see
+            activity here.
+          </div>
+        )}
     </div>
   );
 }
