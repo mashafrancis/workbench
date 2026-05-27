@@ -17,7 +17,7 @@ import type { FrameworkMeta } from "./types";
  * command, mount-it code sample, "what you get" bullet list, "why not Bull
  * Board" callout with a compact comparison table, and a call-to-action.
  *
- * Sharing the template means a copy edit propagates to all 11 posts at once,
+ * Sharing the template means a copy edit propagates to all framework posts at once,
  * and individual posts can't drift apart. The only per-framework variation
  * lives in `framework.flavor`, `framework.codeSample`, and a couple of small
  * one-liners — everything else comes from `comparison.ts`.
@@ -295,7 +295,7 @@ export function BullBoardComparisonBody() {
 
       <ul className="not-prose my-6 space-y-2 pl-0">
         {[
-          "You're on a framework Bull Board doesn't ship a first-party adapter for — Hono, Elysia, NestJS, Next.js, Astro, Nuxt, Bun, or h3.",
+          "You're on a framework Bull Board doesn't ship a first-party adapter for — Hono, Elysia, NestJS, AdonisJS, Next.js, TanStack Start, Astro, Nuxt, Bun, or h3.",
           "You want a local-first inspector you can run on your laptop without touching the server — point it at any Redis URL, get the dashboard.",
           "Your team triages production failures regularly and you want grouped errors, trend lines, and stack traces that open in your editor.",
           "You use FlowProducer and need a real DAG, not a flat list.",
@@ -356,7 +356,7 @@ export function BullBoardComparisonBody() {
           Try Workbench
         </div>
         <div className="text-xl font-semibold tracking-tight md:text-2xl">
-          One command, eleven frameworks.
+          One command, thirteen frameworks.
         </div>
         <CopyCommand command={cmd} variant="button" />
       </div>

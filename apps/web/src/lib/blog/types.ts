@@ -30,6 +30,8 @@ export interface FrameworkMeta {
   codeSample: string;
   /** Logo component. */
   Logo: LogoComponent;
+  /** Override when a framework lands after the initial rollout batch. */
+  publishedAt?: string;
 }
 
 export type PostCategory =

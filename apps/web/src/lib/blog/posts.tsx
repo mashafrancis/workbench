@@ -43,7 +43,7 @@ const frameworkPosts: BlogPost[] = FRAMEWORK_ORDER.map((key) => {
       "redis queue dashboard",
     ],
     category: "Announcement",
-    publishedAt: FRAMEWORK_ANNOUNCEMENT_DATE,
+    publishedAt: framework.publishedAt ?? FRAMEWORK_ANNOUNCEMENT_DATE,
     eyebrow: "Now supported",
     heading: `Workbench is now available for ${framework.name}`,
     lede: `A modern, open-source BullMQ dashboard for ${framework.name} — drop it into your existing server with one command, or run it as a native desktop app pointed at the same Redis.`,

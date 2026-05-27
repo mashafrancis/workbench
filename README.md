@@ -11,7 +11,7 @@ Open-source BullMQ dashboard. Drop-in for any Node or Bun backend.
 Workbench is a modern dashboard for [BullMQ](https://docs.bullmq.io/). Runs jobs, flows, schedulers and metrics, all served from your own backend behind your own auth.
 
 - Zero infrastructure — mounts as a route in your existing app
-- Adapters for Hono, Elysia, Express, Fastify, Koa, NestJS, Next.js, Astro, Nuxt, Bun.serve, and h3
+- Adapters for Hono, Elysia, Express, Fastify, Koa, NestJS, AdonisJS, Next.js, TanStack Start, Astro, Nuxt, Bun.serve, and h3
 - MCP server for Cursor, Claude Desktop, Zed, and Continue.dev — drive your queues from your editor's chat
 - Flows & DAG view, metrics, schedulers, search
 - Dark-mode UI, basic-auth-protected by default
@@ -150,6 +150,28 @@ bootstrap();
 </details>
 
 <details>
+<summary><strong>AdonisJS</strong></summary>
+
+```bash
+npm i @getworkbench/adonis bullmq @adonisjs/core
+```
+
+```ts
+// start/routes.ts
+import router from "@adonisjs/core/services/router";
+import { Queue } from "bullmq";
+import { mountWorkbench } from "@getworkbench/adonis";
+
+const emailQueue = new Queue("email", { connection: { url: process.env.REDIS_URL! } });
+
+mountWorkbench(router, "/jobs", { queues: [emailQueue] });
+```
+
+> Works with AdonisJS 6 and 7. See [examples/with-adonis](./examples/with-adonis/).
+
+</details>
+
+<details>
 <summary><strong>Next.js (App Router)</strong></summary>
 
 ```bash
@@ -170,6 +192,52 @@ export const { GET, POST, PUT, PATCH, DELETE } = workbench({
 ```
 
 > Next doesn't host BullMQ workers itself — run them in a sibling process. See [examples/with-next](./examples/with-next/).
+
+</details>
+
+<details>
+<summary><strong>TanStack Start</strong></summary>
+
+```bash
+npm i @getworkbench/tanstack-start bullmq @tanstack/react-start
+```
+
+```ts
+// src/lib/workbench-handlers.ts
+import { Queue } from "bullmq";
+import { workbench } from "@getworkbench/tanstack-start";
+
+const emailQueue = new Queue("email", { connection: { url: process.env.REDIS_URL! } });
+
+export const workbenchHandlers = workbench({
+  queues: [emailQueue],
+  basePath: "/jobs",
+});
+```
+
+```ts
+// src/routes/jobs.ts
+import { createFileRoute } from "@tanstack/react-router";
+import { workbenchHandlers } from "../lib/workbench-handlers";
+
+export const Route = createFileRoute("/jobs")({
+  server: { handlers: workbenchHandlers },
+});
+```
+
+```ts
+// src/routes/jobs/$.ts
+import { createFileRoute } from "@tanstack/react-router";
+import { workbenchHandlers } from "../../lib/workbench-handlers";
+
+export const Route = createFileRoute("/jobs/$")({
+  server: { handlers: workbenchHandlers },
+});
+```
+
+> Register handlers on both `/jobs` and `/jobs/$` so the bare mount and nested paths work.
+> TanStack Start doesn't host BullMQ workers itself — run them in a sibling process.
+> See [examples/with-tanstack-start](./examples/with-tanstack-start/).
 
 </details>
 
@@ -311,7 +379,7 @@ Visit `http://localhost:PORT/jobs`.
 | `auth`     | `{ username, password }`            | Basic auth credentials. Strongly recommended in prod.      |
 | `title`    | `string`                            | Dashboard title. Default: `"Workbench"`.                   |
 | `logo`     | `string`                            | Logo URL to display in the nav.                            |
-| `basePath` | `string`                            | Override base path detection. Required for `@getworkbench/elysia`, `@getworkbench/koa`, `@getworkbench/next`, `@getworkbench/astro`, `@getworkbench/nuxt`, and `@getworkbench/h3`. |
+| `basePath` | `string`                            | Override base path detection. Required for `@getworkbench/elysia`, `@getworkbench/koa`, `@getworkbench/next`, `@getworkbench/tanstack-start`, `@getworkbench/astro`, `@getworkbench/nuxt`, and `@getworkbench/h3`. |
 | `readonly` | `boolean`                           | Disable actions (retry, remove, promote).                  |
 | `tags`     | `string[]`                          | Fields from `job.data` to extract as filterable tags.      |
 
@@ -326,7 +394,9 @@ Visit `http://localhost:PORT/jobs`.
 | [`@getworkbench/fastify`](./packages/fastify)                           | Fastify adapter               |
 | [`@getworkbench/koa`](./packages/koa)                                   | Koa adapter                  |
 | [`@getworkbench/nestjs`](./packages/nestjs)                             | NestJS adapter               |
+| [`@getworkbench/adonis`](./packages/adonis)                             | AdonisJS adapter             |
 | [`@getworkbench/next`](./packages/next)                                 | Next.js App Router adapter   |
+| [`@getworkbench/tanstack-start`](./packages/tanstack-start)             | TanStack Start adapter       |
 | [`@getworkbench/astro`](./packages/astro)                               | Astro adapter                |
 | [`@getworkbench/nuxt`](./packages/nuxt)                                 | Nuxt (Nitro/h3) adapter      |
 | [`@getworkbench/h3`](./packages/h3)                                     | h3 adapter (Nitro/SolidStart/Analog) |

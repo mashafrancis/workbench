@@ -1,6 +1,6 @@
 {
   "name": "@getworkbench/express",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Express adapter for Workbench — drop-in BullMQ dashboard.",
   "type": "module",
   "main": "./dist/index.js",

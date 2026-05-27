@@ -5,6 +5,20 @@ All notable changes to Workbench will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-05-27
+
+### Added
+
+- **`@getworkbench/adonis`** — first-party AdonisJS 6/7 adapter with `mountWorkbench()` for catch-all routing on `router.any()`.
+- **`@getworkbench/tanstack-start`** — TanStack Start server-route adapter; mount via `createFileRoute(...)({ server: { handlers: workbench(...) } })`.
+- **`@getworkbench/cli`** detects AdonisJS and TanStack Start projects and scaffolds the Workbench mount (routes file or server routes).
+- Smoke-tested example apps: `examples/with-adonis`, `examples/with-tanstack-start`.
+- Marketing site logos, hero strip, blog posts, and `llms.txt` entries for both frameworks.
+
+### Changed
+
+- All 14 publishable adapter packages (`@getworkbench/core`, `hono`, `elysia`, `express`, `fastify`, `nestjs`, `next`, `koa`, `astro`, `nuxt`, `bun`, `h3`, `adonis`, `tanstack-start`) bump together to `0.7.0`. `@getworkbench/cli` bumps to `0.5.0`; `@getworkbench/mcp` stays at `0.5.1`.
+
 ## [0.6.0] - 2026-05-27
 
 ### Added

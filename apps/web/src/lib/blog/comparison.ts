@@ -39,7 +39,7 @@ export const COMPARISON_ROWS: ComparisonRow[] = [
   {
     feature: "Officially supported frameworks",
     workbench:
-      "Hono, Elysia, Express, Fastify, NestJS, Next.js, Koa, Astro, Nuxt, Bun, h3",
+      "Hono, Elysia, Express, Fastify, NestJS, AdonisJS, Next.js, TanStack Start, Koa, Astro, Nuxt, Bun, h3",
     bullBoard: "Express, Fastify, Hapi, Koa (community Next.js wrappers)",
   },
   {
@@ -119,7 +119,7 @@ export const COMPARISON_FAQ: Array<{ question: string; answer: string }> = [
   {
     question: "What is the best alternative to bull-board?",
     answer:
-      "Workbench is the modern open-source alternative to bull-board for BullMQ. It ships first-party adapters for eleven Node.js frameworks (Hono, Elysia, Express, Fastify, NestJS, Next.js, Koa, Astro, Nuxt, Bun, and h3), adds a native macOS desktop app for local-first inspection, and includes FlowProducer DAG visualisation, error triage grouped by exception class, and a scheduler timeline — features bull-board does not ship out of the box.",
+      "Workbench is the modern open-source alternative to bull-board for BullMQ. It ships first-party adapters for thirteen Node.js frameworks (Hono, Elysia, Express, Fastify, NestJS, AdonisJS, Next.js, TanStack Start, Koa, Astro, Nuxt, Bun, and h3), adds a native macOS desktop app for local-first inspection, and includes FlowProducer DAG visualisation, error triage grouped by exception class, and a scheduler timeline — features bull-board does not ship out of the box.",
   },
   {
     question: "Does Workbench work with the same BullMQ version as bull-board?",
@@ -134,7 +134,7 @@ export const COMPARISON_FAQ: Array<{ question: string; answer: string }> = [
   {
     question: "Which frameworks does Workbench support?",
     answer:
-      "Workbench ships first-party adapters for Hono, Elysia, Express, Fastify, NestJS, Next.js, Koa, Astro, Nuxt, Bun (Bun.serve), and h3. Each adapter is published as @getworkbench/<framework> on npm and ships with a runnable example in the monorepo. bull-board officially supports Express, Fastify, Hapi, and Koa.",
+      "Workbench ships first-party adapters for Hono, Elysia, Express, Fastify, NestJS, AdonisJS, Next.js, TanStack Start, Koa, Astro, Nuxt, Bun (Bun.serve), and h3. Each adapter is published as @getworkbench/<framework> on npm and ships with a runnable example in the monorepo. bull-board officially supports Express, Fastify, Hapi, and Koa.",
   },
   {
     question: "How do I install Workbench in my existing Node.js app?",
@@ -164,7 +164,7 @@ export const BULL_BOARD_HEADLINES = [
   },
   {
     title: "Wider framework coverage, with first-party adapters",
-    body: "Bull Board ships adapters for Express, Fastify, Hapi, and Koa. Workbench adds Hono, Elysia, NestJS, Next.js, Astro, Nuxt, Bun.serve, and h3 — eleven officially-supported integrations, each with a smoke-tested example app.",
+    body: "Bull Board ships adapters for Express, Fastify, Hapi, and Koa. Workbench adds Hono, Elysia, NestJS, AdonisJS, Next.js, TanStack Start, Astro, Nuxt, Bun.serve, and h3 — thirteen officially-supported integrations, each with a smoke-tested example app.",
   },
   {
     title: "Built for production triage, not just queue inspection",

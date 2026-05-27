@@ -17,6 +17,7 @@ import Image from "next/image";
 import { ActionButton } from "../components/action-button";
 import { CopyCommand } from "../components/copy-command";
 import {
+  AdonisLogo,
   AstroLogo,
   BunLogo,
   ElysiaLogo,
@@ -28,6 +29,7 @@ import {
   NestjsLogo,
   NextLogo,
   NuxtLogo,
+  TanstackStartLogo,
 } from "../components/logos";
 import {
   ErrorsMockup,
@@ -73,7 +75,13 @@ const frameworks = [
   { name: "Express", Logo: ExpressLogo, ...npmAdapter("express") },
   { name: "Fastify", Logo: FastifyLogo, ...npmAdapter("fastify") },
   { name: "NestJS", Logo: NestjsLogo, ...npmAdapter("nestjs") },
+  { name: "AdonisJS", Logo: AdonisLogo, ...npmAdapter("adonis") },
   { name: "Next.js", Logo: NextLogo, ...npmAdapter("next") },
+  {
+    name: "TanStack Start",
+    Logo: TanstackStartLogo,
+    ...npmAdapter("tanstack-start"),
+  },
   { name: "Koa", Logo: KoaLogo, ...npmAdapter("koa") },
   { name: "Astro", Logo: AstroLogo, ...npmAdapter("astro") },
   { name: "Nuxt", Logo: NuxtLogo, ...npmAdapter("nuxt") },
@@ -626,7 +634,7 @@ function InstallSection() {
           <InstallCard
             eyebrow="Embed"
             title="Drop into your Node app"
-            body="One command wires the dashboard into your existing server. Works with Hono, Elysia, Express, Fastify, NestJS, Next.js, Koa, Astro, Nuxt, Bun, and h3 — share the same Redis as your workers."
+            body="One command wires the dashboard into your existing server. Works with Hono, Elysia, Express, Fastify, NestJS, AdonisJS, Next.js, TanStack Start, Koa, Astro, Nuxt, Bun, and h3 — share the same Redis as your workers."
             action={<CopyCommand command={INSTALL_COMMAND} variant="button" />}
           />
         </div>

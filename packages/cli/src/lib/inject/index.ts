@@ -1,4 +1,5 @@
 import type { Framework } from "../framework-detect";
+import { injectAdonis } from "./adonis";
 import { injectAstro } from "./astro";
 import { injectBun } from "./bun";
 import { injectElysia } from "./elysia";
@@ -10,6 +11,7 @@ import { injectKoa } from "./koa";
 import { injectNestjs } from "./nestjs";
 import { injectNext } from "./next";
 import { injectNuxt } from "./nuxt";
+import { injectTanstackStart } from "./tanstack-start";
 import type { Injector } from "./types";
 
 export const INJECTORS: Record<Framework, Injector> = {
@@ -24,6 +26,8 @@ export const INJECTORS: Record<Framework, Injector> = {
   nuxt: injectNuxt,
   bun: injectBun,
   h3: injectH3,
+  adonis: injectAdonis,
+  "tanstack-start": injectTanstackStart,
 };
 
 export type { InjectionResult, InjectorContext } from "./types";

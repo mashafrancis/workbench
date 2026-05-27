@@ -115,7 +115,7 @@ const siteJsonLd = {
       url: SITE_URL,
       name: "Workbench",
       description:
-        "The missing dashboard for BullMQ — a local-first native macOS app and embeddable Node.js dashboard with first-party adapters for eleven frameworks.",
+        "The missing dashboard for BullMQ — a local-first native macOS app and embeddable Node.js dashboard with first-party adapters for thirteen frameworks.",
       publisher: { "@id": `${SITE_URL}/#organization` },
       inLanguage: "en-US",
     },
