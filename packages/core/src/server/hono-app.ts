@@ -4,7 +4,7 @@ import { cors } from "hono/cors";
 import { createApiRoutes } from "../api/router";
 import type { WorkbenchCore } from "../core/workbench";
 import { resolveBasePath } from "./base-path";
-import { renderIndexHtml, serveStaticAsset } from "./static-assets";
+import { renderIndexHtml, serveStaticAsset, serveUiFile } from "./static-assets";
 
 /**
  * Build a fully-wired Hono app for Workbench:
@@ -41,6 +41,17 @@ export function buildWorkbenchApp(core: WorkbenchCore): Hono {
   app.get("/assets/:file", (c) => {
     const fileName = c.req.param("file");
     const asset = serveStaticAsset(fileName);
+    if (asset.status === 404 || !asset.body) {
+      return c.text("Not found", 404);
+    }
+    return new Response(new Uint8Array(asset.body), {
+      status: 200,
+      headers: { "Content-Type": asset.contentType },
+    });
+  });
+
+  app.get("/app-icon.svg", (c) => {
+    const asset = serveUiFile("app-icon.svg");
     if (asset.status === 404 || !asset.body) {
       return c.text("Not found", 404);
     }

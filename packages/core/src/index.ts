@@ -57,6 +57,7 @@ export {
   renderIndexHtml,
   type StaticAssetResult,
   serveStaticAsset,
+  serveUiFile,
 } from "./server/static-assets";
 
 export { UI_DIST_PATH } from "./ui-dist";

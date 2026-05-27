@@ -264,6 +264,7 @@ function RootLayout() {
         onQueueSelect={handleQueueSelect}
         isDark={isDark}
         onToggleTheme={() => setIsDark(!isDark)}
+        logo={config.logo}
       />
 
       <div className="flex flex-1 flex-col overflow-hidden">

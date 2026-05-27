@@ -5,6 +5,7 @@ import {
   renderIndexHtml,
   resolveBasePath,
   serveStaticAsset,
+  serveUiFile,
   WorkbenchCore,
   type WorkbenchOptions,
 } from "@getworkbench/core";
@@ -95,6 +96,15 @@ export function workbench(options: WorkbenchOptions | Queue[]): Router {
 
   router.get("/assets/:file", (req, res) => {
     const asset = serveStaticAsset(req.params.file as string);
+    if (asset.status === 404 || !asset.body) {
+      res.status(404).type("text/plain").send("Not found");
+      return;
+    }
+    res.status(200).type(asset.contentType).send(asset.body);
+  });
+
+  router.get("/app-icon.svg", (_req, res) => {
+    const asset = serveUiFile("app-icon.svg");
     if (asset.status === 404 || !asset.body) {
       res.status(404).type("text/plain").send("Not found");
       return;

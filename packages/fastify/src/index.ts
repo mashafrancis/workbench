@@ -5,6 +5,7 @@ import {
   renderIndexHtml,
   resolveBasePath,
   serveStaticAsset,
+  serveUiFile,
   WorkbenchCore,
   type WorkbenchOptions,
 } from "@getworkbench/core";
@@ -119,6 +120,16 @@ export function workbench(
         return reply;
       },
     );
+
+    fastify.get("/app-icon.svg", async (_req, reply) => {
+      const asset = serveUiFile("app-icon.svg");
+      if (asset.status === 404 || !asset.body) {
+        reply.code(404).type("text/plain").send("Not found");
+        return reply;
+      }
+      reply.code(200).type(asset.contentType).send(asset.body);
+      return reply;
+    });
 
     fastify.get("/*", async (req, reply) => {
       const pathname = (req.url ?? "/").split("?")[0] ?? "/";

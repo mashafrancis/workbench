@@ -16,13 +16,22 @@ export interface StaticAssetResult {
  * the file lookup or content-type sniffing.
  */
 export function serveStaticAsset(filename: string): StaticAssetResult {
-  const filePath = join(UI_DIST_PATH, "assets", filename);
+  return serveUiFile(join("assets", filename));
+}
+
+/**
+ * Read a bundled UI file from `UI_DIST_PATH/<filename>`.
+ * Used for root-level assets like `app-icon.svg` that Vite copies from `public/`.
+ */
+export function serveUiFile(relativePath: string): StaticAssetResult {
+  const filePath = join(UI_DIST_PATH, relativePath);
 
   if (!existsSync(filePath)) {
     return { status: 404, body: null, contentType: "text/plain" };
   }
 
   const body = readFileSync(filePath);
+  const filename = relativePath.split("/").pop() ?? relativePath;
   const contentType = filename.endsWith(".js")
     ? "application/javascript"
     : filename.endsWith(".css")
@@ -31,6 +40,8 @@ export function serveStaticAsset(filename: string): StaticAssetResult {
         ? "image/svg+xml"
         : filename.endsWith(".png")
           ? "image/png"
+          : filename.endsWith(".ico")
+            ? "image/x-icon"
           : filename.endsWith(".woff2")
             ? "font/woff2"
             : "application/octet-stream";
@@ -76,6 +87,8 @@ function fallbackHtml(title: string, basePath: string): string {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${title}</title>
+    <link rel="icon" href="./app-icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./app-icon.svg" />
     <style>
       body {
         font-family: system-ui, sans-serif;

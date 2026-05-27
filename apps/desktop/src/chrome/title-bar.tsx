@@ -100,7 +100,8 @@ export function TitleBar({
 
 function Wordmark(): JSX.Element {
   return (
-    <span className="select-none text-sm font-semibold tracking-tight">
+    <span className="flex select-none items-center gap-2 text-sm font-semibold tracking-tight">
+      <img src="/icon.svg" alt="" className="h-4 w-4 shrink-0" />
       Workbench
     </span>
   );
