@@ -1,6 +1,6 @@
 {
   "name": "@getworkbench/hono",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Hono adapter for Workbench — drop-in BullMQ dashboard.",
   "type": "module",
   "main": "./dist/index.js",

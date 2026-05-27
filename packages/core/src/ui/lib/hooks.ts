@@ -376,14 +376,17 @@ export function useCleanQueue() {
     mutationFn: ({
       queueName,
       status,
+      grace,
     }: {
       queueName: string;
       status: JobStatus;
-    }) => api.cleanQueue(queueName, status),
+      grace?: number;
+    }) => api.cleanQueue(queueName, status, grace),
     onSuccess: (_, { queueName }) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.jobsAll(queueName) });
       queryClient.invalidateQueries({ queryKey: queryKeys.runsAll });
       queryClient.invalidateQueries({ queryKey: queryKeys.queues });
+      queryClient.invalidateQueries({ queryKey: queryKeys.overview });
     },
   });
 }

@@ -66,6 +66,8 @@ export interface QueueInfo {
     paused: number;
   };
   isPaused: boolean;
+  /** Active workers for this queue; null when Redis CLIENT LIST is unavailable */
+  workerCount?: number | null;
 }
 
 /**
@@ -175,6 +177,7 @@ export interface RunInfoList {
   processedOn?: number;
   timestamp: number;
   duration?: number;
+  failedReason?: string;
 }
 
 /**

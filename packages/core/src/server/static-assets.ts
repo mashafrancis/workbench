@@ -42,9 +42,9 @@ export function serveUiFile(relativePath: string): StaticAssetResult {
           ? "image/png"
           : filename.endsWith(".ico")
             ? "image/x-icon"
-          : filename.endsWith(".woff2")
-            ? "font/woff2"
-            : "application/octet-stream";
+            : filename.endsWith(".woff2")
+              ? "font/woff2"
+              : "application/octet-stream";
 
   return { status: 200, body, contentType };
 }

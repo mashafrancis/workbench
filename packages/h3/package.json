@@ -1,6 +1,6 @@
 {
   "name": "@getworkbench/h3",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "h3 adapter for Workbench — drop-in BullMQ dashboard for h3, Nitro, Nuxt, SolidStart, Analog.",
   "type": "module",
   "main": "./dist/index.js",

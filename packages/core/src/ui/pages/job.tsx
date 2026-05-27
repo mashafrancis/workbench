@@ -29,7 +29,13 @@ import { StatusBadge } from "@/components/shared/status-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useJob, useJobLogs, usePromoteJob, useRemoveJob, useRetryJob } from "@/lib/hooks";
+import {
+  useJob,
+  useJobLogs,
+  usePromoteJob,
+  useRemoveJob,
+  useRetryJob,
+} from "@/lib/hooks";
 import { cn, formatAbsoluteTime, formatDuration } from "@/lib/utils";
 import type { JobSearch } from "@/router";
 
@@ -54,7 +60,8 @@ export function JobPage({
 }: JobPageProps) {
   const navigate = useNavigate();
   const { data: job, isLoading, error } = useJob(queueName, jobId);
-  const activeTab = search.tab || (job?.status === "failed" ? "error" : "payload");
+  const activeTab =
+    search.tab || (job?.status === "failed" ? "error" : "payload");
   const logsEnabled = activeTab === "logs";
   const { data: jobLogs } = useJobLogs(queueName, jobId, {
     enabled: logsEnabled,
@@ -239,6 +246,31 @@ export function JobPage({
           </div>
         </div>
 
+        {job.status === "active" && (
+          <div className="border-b px-4 py-2">
+            <div className="mb-1 flex items-center justify-between text-xs text-muted-foreground">
+              <span>Progress</span>
+              <span>
+                {typeof job.progress === "number"
+                  ? `${Math.round(job.progress)}%`
+                  : "Running"}
+              </span>
+            </div>
+            <div className="h-1 bg-muted">
+              <div
+                className="h-full bg-chart-2 transition-all duration-300"
+                style={{
+                  width: `${
+                    typeof job.progress === "number"
+                      ? Math.min(100, Math.max(0, job.progress))
+                      : 100
+                  }%`,
+                }}
+              />
+            </div>
+          </div>
+        )}
+
         {/* Metadata Rows */}
         <div className="divide-y text-sm">
           <MetadataRow icon={Hash} label="Job ID" mono>
@@ -369,6 +401,18 @@ export function JobPage({
           <TabsTrigger value="timeline">Timeline</TabsTrigger>
           <TabsTrigger value="logs" className="gap-1.5">
             Logs
+            {job.status === "active" && (
+              <Badge
+                variant="secondary"
+                className="gap-1 px-1.5 py-0 text-[10px] font-normal"
+              >
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-chart-2 opacity-75" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-chart-2" />
+                </span>
+                Live
+              </Badge>
+            )}
             {jobLogs && jobLogs.count > 0 && (
               <Badge
                 variant="secondary"
@@ -556,13 +600,7 @@ function ErrorDisplay({
   );
 }
 
-function JobLogs({
-  logs,
-  count,
-}: {
-  logs?: string[];
-  count?: number;
-}) {
+function JobLogs({ logs, count }: { logs?: string[]; count?: number }) {
   const scrollRef = React.useRef<HTMLDivElement>(null);
   const [copied, setCopied] = React.useState(false);
 
@@ -597,7 +635,8 @@ function JobLogs({
     <div className="flex flex-col overflow-hidden border bg-card">
       <div className="flex items-center justify-between border-b px-4 py-2">
         <span className="text-sm text-muted-foreground">
-          {count ?? logs.length} log {(count ?? logs.length) === 1 ? "entry" : "entries"}
+          {count ?? logs.length} log{" "}
+          {(count ?? logs.length) === 1 ? "entry" : "entries"}
         </span>
         <button
           type="button"
@@ -613,10 +652,16 @@ function JobLogs({
           Copy
         </button>
       </div>
-      <div ref={scrollRef} className="max-h-[calc(100vh-480px)] overflow-auto p-4">
+      <div
+        ref={scrollRef}
+        className="max-h-[calc(100vh-480px)] overflow-auto p-4"
+      >
         <div className="font-mono text-xs leading-relaxed text-foreground">
           {logs.map((line, index) => (
-            <div key={index.toString()} className="flex gap-3 whitespace-pre-wrap">
+            <div
+              key={index.toString()}
+              className="flex gap-3 whitespace-pre-wrap"
+            >
               <span className="w-8 shrink-0 select-none text-right text-muted-foreground/60">
                 {index + 1}
               </span>
@@ -771,16 +816,16 @@ function Timeline({ job }: TimelineProps) {
 
   // Generate time axis labels
   const timeLabels = React.useMemo(() => {
-    const { start, duration } = timeRange;
+    const { duration } = timeRange;
     const labels: { position: number; label: string }[] = [];
     const steps = 5;
 
     for (let i = 0; i <= steps; i++) {
-      const timestamp = start + (duration / steps) * i;
-      const relativePosition = ((timestamp - start) / duration) * 100;
+      const elapsed = (duration / steps) * i;
+      const relativePosition = (elapsed / duration) * 100;
       labels.push({
         position: relativePosition,
-        label: formatDuration(timestamp - start),
+        label: formatDuration(elapsed),
       });
     }
 
@@ -909,7 +954,12 @@ function Timeline({ job }: TimelineProps) {
               className="absolute font-mono text-[10px] text-muted-foreground"
               style={{
                 left: `${label.position}%`,
-                transform: "translateX(-50%)",
+                transform:
+                  i === 0
+                    ? "translateX(0)"
+                    : i === timeLabels.length - 1
+                      ? "translateX(-100%)"
+                      : "translateX(-50%)",
               }}
             >
               {label.label}

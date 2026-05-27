@@ -116,6 +116,7 @@
     font-family:
       "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
       Ubuntu, sans-serif;
+    font-size: 93.75%; /* ~15px — slightly denser dashboard UI at default 16px */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -231,6 +232,15 @@
 
   *::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
+  }
+
+  /* Workbench sidebar: square corners, sharp borders */
+  [data-sidebar="sidebar"],
+  [data-sidebar="menu-button"],
+  [data-sidebar="menu-sub-button"],
+  [data-sidebar="header"],
+  [data-sidebar="footer"] {
+    border-radius: 0;
   }
 }
 

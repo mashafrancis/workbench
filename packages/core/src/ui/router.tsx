@@ -13,11 +13,14 @@ import { z } from "zod";
 import { AppSidebar, type NavItem } from "@/components/app-sidebar";
 import { CommandPalette } from "@/components/layout/command-palette";
 import { HeaderSearch } from "@/components/layout/header-search";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner";
 import { useConfig, useQueueNames, useQueues } from "@/lib/hooks";
 import { FlowPage } from "@/pages/flow";
 import { FlowsPage } from "@/pages/flows";
 import { JobPage } from "@/pages/job";
 import { MetricsPage } from "@/pages/metrics";
+import { OverviewPage } from "@/pages/overview";
 import { QueuePage } from "@/pages/queue";
 import { RunsPage } from "@/pages/runs";
 import { SchedulersPage } from "@/pages/schedulers";
@@ -157,6 +160,9 @@ function RootLayout() {
   const { activeNav, activeQueue } = React.useMemo(() => {
     const path = location.pathname;
     if (path === "/" || path === "") {
+      return { activeNav: "overview" as NavItem, activeQueue: undefined };
+    }
+    if (path === "/runs") {
       return { activeNav: "runs" as NavItem, activeQueue: undefined };
     }
     if (path === "/metrics") {
@@ -228,8 +234,11 @@ function RootLayout() {
 
   const handleNavSelect = (nav: NavItem) => {
     switch (nav) {
-      case "runs":
+      case "overview":
         navigate({ to: "/" });
+        break;
+      case "runs":
+        navigate({ to: "/runs" });
         break;
       case "metrics":
         navigate({ to: "/metrics" });
@@ -254,25 +263,27 @@ function RootLayout() {
   };
 
   return (
-    <div className="flex h-full bg-background">
-      <AppSidebar
-        queues={config.queues}
-        pausedQueues={pausedQueues}
-        activeNav={activeNav}
-        activeQueue={activeQueue}
-        onNavSelect={handleNavSelect}
-        onQueueSelect={handleQueueSelect}
-        isDark={isDark}
-        onToggleTheme={() => setIsDark(!isDark)}
-        logo={config.logo}
-      />
+    <SidebarProvider defaultOpen={false} className="h-full">
+      <div className="flex h-full min-h-0 w-full">
+        <AppSidebar
+          queues={config.queues}
+          pausedQueues={pausedQueues}
+          activeNav={activeNav}
+          activeQueue={activeQueue}
+          onNavSelect={handleNavSelect}
+          onQueueSelect={handleQueueSelect}
+          isDark={isDark}
+          onToggleTheme={() => setIsDark(!isDark)}
+          logo={config.logo}
+        />
 
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <SearchContext.Provider
-          value={{ searchQuery, setSearchQuery, setCommandOpen }}
-        >
-          <Outlet />
-        </SearchContext.Provider>
+        <SidebarInset className="flex min-h-0 flex-1 flex-col overflow-hidden">
+          <SearchContext.Provider
+            value={{ searchQuery, setSearchQuery, setCommandOpen }}
+          >
+            <Outlet />
+          </SearchContext.Provider>
+        </SidebarInset>
       </div>
 
       <CommandPalette
@@ -299,7 +310,8 @@ function RootLayout() {
           setCommandOpen(false);
         }}
       />
-    </div>
+      <Toaster position="top-right" />
+    </SidebarProvider>
   );
 }
 
@@ -317,11 +329,11 @@ function PageLayout({
 
   return (
     <>
-      <header className="flex h-14 shrink-0 items-center justify-between gap-2 border-b border-border px-6">
-        <div className="flex items-center gap-2">
+      <header className="relative z-20 flex h-14 shrink-0 items-center justify-between gap-2 border-b border-border px-4 md:px-6">
+        <div className="flex min-w-0 items-center gap-2">
           <h1 className="text-lg font-semibold">{title}</h1>
           {subtitle && (
-            <span className="font-mono text-sm text-muted-foreground">
+            <span className="hidden font-mono text-sm text-muted-foreground sm:inline">
               {subtitle}
             </span>
           )}
@@ -337,10 +349,34 @@ function PageLayout({
   );
 }
 
+function OverviewRoute() {
+  const navigate = useNavigate();
+
+  return (
+    <PageLayout title="Overview">
+      <OverviewPage
+        onQueueSelect={(queueName) =>
+          navigate({
+            to: "/queues/$queueName",
+            params: { queueName },
+          })
+        }
+        onViewFailed={(queueName) =>
+          navigate({
+            to: "/queues/$queueName",
+            params: { queueName },
+            search: { status: "failed" },
+          })
+        }
+      />
+    </PageLayout>
+  );
+}
+
 // Route components - all pages eagerly loaded for instant navigation
 function RunsRoute() {
   const navigate = useNavigate();
-  const search = useSearch({ from: "/" });
+  const search = useSearch({ from: "/runs" });
 
   return (
     <PageLayout title="Runs">
@@ -348,7 +384,7 @@ function RunsRoute() {
         search={search}
         onSearchChange={(newSearch) => {
           navigate({
-            to: "/",
+            to: "/runs",
             search: newSearch,
             replace: true,
           });
@@ -439,6 +475,7 @@ function TestRoute() {
 
 function QueueRoute() {
   const { queueName } = useParams({ from: "/queues/$queueName" });
+  const { data: config } = useConfig();
   const navigate = useNavigate();
   const search = useSearch({ from: "/queues/$queueName" });
 
@@ -446,6 +483,7 @@ function QueueRoute() {
     <PageLayout title={queueName}>
       <QueuePage
         queueName={queueName}
+        readonly={config?.readonly}
         search={search}
         onSearchChange={(newSearch) => {
           navigate({
@@ -511,6 +549,12 @@ const rootRoute = createRootRoute({
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
+  component: OverviewRoute,
+});
+
+const runsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/runs",
   component: RunsRoute,
   validateSearch: runsSearchSchema,
 });
@@ -564,6 +608,7 @@ const jobRoute = createRoute({
 // Route tree
 const routeTree = rootRoute.addChildren([
   indexRoute,
+  runsRoute,
   metricsRoute,
   schedulersRoute,
   flowsRoute,
