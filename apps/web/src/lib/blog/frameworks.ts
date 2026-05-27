@@ -1,4 +1,5 @@
 import {
+  AdonisLogo,
   AstroLogo,
   BunLogo,
   ElysiaLogo,
@@ -10,6 +11,7 @@ import {
   NestjsLogo,
   NextLogo,
   NuxtLogo,
+  TanstackStartLogo,
 } from "../../components/logos";
 import type { FrameworkMeta } from "./types";
 
@@ -155,6 +157,63 @@ export const { GET, POST, PUT, PATCH, DELETE } = workbench({
 });`,
   },
 
+  adonis: {
+    slug: "adonis",
+    name: "AdonisJS",
+    homepage: "https://adonisjs.com",
+    flavor:
+      "the structured TypeScript framework with IoC, first-class HTTP routing, and a thriving enterprise ecosystem on Node",
+    mountSurface: "start/routes.ts",
+    Logo: AdonisLogo,
+    publishedAt: "2026-05-27",
+    codeSample: `// start/routes.ts
+import router from "@adonisjs/core/services/router";
+import { Queue } from "bullmq";
+import { mountWorkbench } from "@getworkbench/adonis";
+
+const emails = new Queue("emails");
+
+mountWorkbench(router, "/jobs", {
+  queues: [emails],
+  auth: {
+    username: process.env.WORKBENCH_USER!,
+    password: process.env.WORKBENCH_PASS!,
+  },
+});`,
+  },
+
+  "tanstack-start": {
+    slug: "tanstack-start",
+    name: "TanStack Start",
+    homepage: "https://tanstack.com/start",
+    flavor:
+      "the full-stack React framework from TanStack with file-based server routes and a Vite-powered production build",
+    mountSurface: "src/routes/jobs/$.ts",
+    Logo: TanstackStartLogo,
+    publishedAt: "2026-05-27",
+    codeSample: `// src/routes/jobs/$.ts
+import { createFileRoute } from "@tanstack/react-router";
+import { Queue } from "bullmq";
+import { workbench } from "@getworkbench/tanstack-start";
+
+const emails = new Queue("emails");
+
+export const Route = createFileRoute("/jobs/$")({
+  server: {
+    handlers: workbench({
+      queues: [emails],
+      basePath: "/jobs",
+      auth: {
+        username: process.env.WORKBENCH_USER!,
+        password: process.env.WORKBENCH_PASS!,
+      },
+    }),
+  },
+});
+
+// Also register the same handlers at src/routes/jobs.ts for /jobs and /jobs/.`,
+  },
+
   koa: {
     slug: "koa",
     name: "Koa",
@@ -280,7 +339,9 @@ export const FRAMEWORK_ORDER = [
   "express",
   "fastify",
   "nestjs",
+  "adonis",
   "next",
+  "tanstack-start",
   "koa",
   "astro",
   "nuxt",

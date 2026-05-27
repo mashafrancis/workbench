@@ -37,6 +37,8 @@ const FRAMEWORK_LABEL: Record<Framework, string> = {
   nuxt: "Nuxt",
   bun: "Bun.serve",
   h3: "h3",
+  adonis: "AdonisJS",
+  "tanstack-start": "TanStack Start",
 };
 
 const FRAMEWORK_PACKAGE: Record<Framework, string> = {
@@ -51,6 +53,8 @@ const FRAMEWORK_PACKAGE: Record<Framework, string> = {
   nuxt: "@getworkbench/nuxt",
   bun: "@getworkbench/bun",
   h3: "@getworkbench/h3",
+  adonis: "@getworkbench/adonis",
+  "tanstack-start": "@getworkbench/tanstack-start",
 };
 
 export async function init(opts: InitOptions): Promise<void> {
@@ -82,7 +86,7 @@ export async function init(opts: InitOptions): Promise<void> {
   if (!detected) {
     log.warn(
       `Workbench ships adapters for ${pc.bold(
-        "Hono, Elysia, Express, Fastify, Koa, NestJS, Next.js, Astro, Nuxt, Bun.serve, and h3",
+        "Hono, Elysia, Express, Fastify, Koa, NestJS, Next.js, Astro, Nuxt, Bun.serve, h3, AdonisJS, and TanStack Start",
       )}. Add one of them to your project and re-run ${pc.cyan(
         "npx @getworkbench/cli init",
       )}.`,
@@ -453,6 +457,45 @@ function snippetFor(
         pc.dim(
           `  // h3's \`**\` only matches one-or-more sub-segments, so both lines are needed.`,
         ),
+        "",
+        `Dashboard will be live at ${pc.cyan(`http://localhost:PORT${mountPath}`)}`,
+        `Docs & README: ${pc.cyan("https://getworkbench.dev")}`,
+      ]
+        .filter(Boolean)
+        .join("\n");
+
+    case "adonis":
+      return [
+        "Open start/routes.ts and add your BullMQ queues to the mount:",
+        "",
+        pc.dim('  import { mountWorkbench } from "@getworkbench/adonis";'),
+        pc.dim(`  mountWorkbench(router, "${mountPath}", {`),
+        pc.dim("    queues: [/* your BullMQ Queue instances */],"),
+        authLine,
+        pc.dim("  });"),
+        "",
+        `Dashboard will be live at ${pc.cyan(`http://localhost:PORT${mountPath}`)}`,
+        `Docs & README: ${pc.cyan("https://getworkbench.dev")}`,
+      ]
+        .filter(Boolean)
+        .join("\n");
+
+    case "tanstack-start":
+      return [
+        "Edit the scaffolded route files and add your BullMQ queues:",
+        "",
+        pc.dim("  src/lib/workbench-handlers.ts"),
+        pc.dim(`  src/routes${mountPath}.ts`),
+        pc.dim(`  src/routes${mountPath}/$.ts`),
+        "",
+        pc.dim('  import { Queue } from "bullmq";'),
+        pc.dim('  import { workbench } from "@getworkbench/tanstack-start";'),
+        "",
+        pc.dim("  export const workbenchHandlers = workbench({"),
+        pc.dim("    queues: [/* your BullMQ Queue instances */],"),
+        pc.dim(`    basePath: "${mountPath}",`),
+        authLine,
+        pc.dim("  });"),
         "",
         `Dashboard will be live at ${pc.cyan(`http://localhost:PORT${mountPath}`)}`,
         `Docs & README: ${pc.cyan("https://getworkbench.dev")}`,

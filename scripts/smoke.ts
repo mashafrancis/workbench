@@ -140,6 +140,25 @@ const EXAMPLES: ExampleSpec[] = [
     readyMatch: /listening on/i,
     passthrough: { path: "/", mustInclude: "Try /jobs" },
   },
+  {
+    name: "adonis",
+    pkg: "example-with-adonis",
+    port: 3121,
+    mount: "/jobs",
+    command: ["bun", "run", "--filter", "example-with-adonis", "start"],
+    readyMatch: /listening on|3121|started/i,
+    passthrough: { path: "/", mustInclude: "Try /jobs" },
+  },
+  {
+    name: "tanstack-start",
+    pkg: "example-with-tanstack-start",
+    port: 3122,
+    mount: "/jobs",
+    setup: ["bun", "run", "--filter", "example-with-tanstack-start", "build"],
+    command: ["bun", "run", "--filter", "example-with-tanstack-start", "start"],
+    readyMatch: /Local:|localhost:3122|3122|preview/i,
+    passthrough: { path: "/", mustInclude: "Try " },
+  },
 ];
 
 const TIMEOUT_MS = 60_000;

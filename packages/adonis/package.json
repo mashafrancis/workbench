@@ -1,0 +1,43 @@
+{
+  "name": "@getworkbench/adonis",
+  "version": "0.6.0",
+  "description": "AdonisJS adapter for Workbench — drop-in BullMQ dashboard.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "clean": "rm -rf dist .turbo"
+  },
+  "dependencies": {
+    "@getworkbench/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@adonisjs/core": "^7.3.1",
+    "@types/node": "^22.10.2",
+    "bullmq": "^5.71.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  },
+  "peerDependencies": {
+    "@adonisjs/core": ">=6.0.0",
+    "bullmq": ">=5.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

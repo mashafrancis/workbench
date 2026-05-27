@@ -1,0 +1,30 @@
+{
+  "name": "example-with-adonis",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "license": "MIT",
+  "imports": {
+    "#start/*": "./start/*.js",
+    "#config/*": "./config/*.js",
+    "#middleware/*": "./app/middleware/*.js",
+    "#exceptions/*": "./app/exceptions/*.js"
+  },
+  "scripts": {
+    "dev": "tsx watch bin/server.ts",
+    "start": "tsx bin/server.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@adonisjs/core": "^7.3.1",
+    "@adonisjs/cors": "^3.0.0",
+    "@getworkbench/adonis": "workspace:*",
+    "bullmq": "^5.71.1",
+    "reflect-metadata": "^0.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

@@ -2,7 +2,7 @@
 
 > Workbench is an open-source, MIT-licensed BullMQ dashboard. It ships as a
 > native macOS desktop app for local-first queue inspection, and as a
-> drop-in server-mounted dashboard with first-party adapters for eleven
+> drop-in server-mounted dashboard with first-party adapters for thirteen
 > Node.js frameworks. Workbench is the modern alternative to bull-board:
 > wider framework coverage, FlowProducer DAG visualisation, error triage
 > grouped by exception class, scheduler timeline for cron / delayed jobs,
@@ -27,7 +27,9 @@ example app in the monorepo.
 - Express — https://www.npmjs.com/package/@getworkbench/express
 - Fastify — https://www.npmjs.com/package/@getworkbench/fastify
 - NestJS — https://www.npmjs.com/package/@getworkbench/nestjs
+- AdonisJS — https://www.npmjs.com/package/@getworkbench/adonis
 - Next.js — https://www.npmjs.com/package/@getworkbench/next
+- TanStack Start — https://www.npmjs.com/package/@getworkbench/tanstack-start
 - Koa — https://www.npmjs.com/package/@getworkbench/koa
 - Astro — https://www.npmjs.com/package/@getworkbench/astro
 - Nuxt — https://www.npmjs.com/package/@getworkbench/nuxt
@@ -62,7 +64,9 @@ scheduler now, enqueue, clean, bulk retry/delete).
 - Express: https://getworkbench.dev/blog/bullmq-dashboard-for-express
 - Fastify: https://getworkbench.dev/blog/bullmq-dashboard-for-fastify
 - NestJS: https://getworkbench.dev/blog/bullmq-dashboard-for-nestjs
+- AdonisJS: https://getworkbench.dev/blog/bullmq-dashboard-for-adonis
 - Next.js: https://getworkbench.dev/blog/bullmq-dashboard-for-next
+- TanStack Start: https://getworkbench.dev/blog/bullmq-dashboard-for-tanstack-start
 - Koa: https://getworkbench.dev/blog/bullmq-dashboard-for-koa
 - Astro: https://getworkbench.dev/blog/bullmq-dashboard-for-astro
 - Nuxt: https://getworkbench.dev/blog/bullmq-dashboard-for-nuxt

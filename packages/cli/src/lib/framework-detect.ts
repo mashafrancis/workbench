@@ -14,14 +14,19 @@ export type Framework =
   | "astro"
   | "nuxt"
   | "bun"
-  | "h3";
+  | "h3"
+  | "adonis"
+  | "tanstack-start";
 
 /**
  * Frameworks whose entry file we edit in place. Next.js, Astro, and Nuxt
  * scaffold a route file instead of editing user code, so they don't need a
  * source regex.
  */
-type EditableFramework = Exclude<Framework, "next" | "astro" | "nuxt">;
+type EditableFramework = Exclude<
+  Framework,
+  "next" | "astro" | "nuxt" | "tanstack-start"
+>;
 
 const FRAMEWORK_REGEX: Record<EditableFramework, RegExp> = {
   hono: /new\s+Hono\s*\(/,
@@ -53,6 +58,8 @@ const PACKAGE_NAMES: Record<Framework, string | string[]> = {
   nuxt: "nuxt",
   bun: ["@types/bun", "bun-types"],
   h3: "h3",
+  adonis: "@adonisjs/core",
+  "tanstack-start": "@tanstack/react-start",
 };
 
 /**
@@ -61,8 +68,10 @@ const PACKAGE_NAMES: Record<Framework, string | string[]> = {
  */
 const DETECTION_PRIORITY: Framework[] = [
   "next",
+  "tanstack-start",
   "nuxt",
   "astro",
+  "adonis",
   "nestjs",
   "elysia",
   "fastify",
@@ -129,11 +138,42 @@ export async function detectFramework(
       continue;
     }
 
+    if (framework === "tanstack-start") {
+      const hasRoutesDir = existsSync(join(cwd, "src/routes"));
+      const hasTanstackPlugin =
+        existsSync(join(cwd, "vite.config.ts")) &&
+        (await fileContains(join(cwd, "vite.config.ts"), "tanstackStart"));
+      if (hasRoutesDir && hasTanstackPlugin) {
+        return { framework, entry: null };
+      }
+      continue;
+    }
+
+    if (framework === "adonis") {
+      const hasRoutes = existsSync(join(cwd, "start/routes.ts"));
+      const hasAdonisRc =
+        existsSync(join(cwd, "adonisrc.ts")) ||
+        existsSync(join(cwd, "adonisrc.js"));
+      if (hasRoutes || hasAdonisRc) {
+        return { framework, entry: join(cwd, "start/routes.ts") };
+      }
+      continue;
+    }
+
     const entry = await findFrameworkEntry(cwd, framework);
     if (entry) return { framework, entry };
   }
 
   return null;
+}
+
+async function fileContains(path: string, needle: string): Promise<boolean> {
+  try {
+    const content = await readFile(path, "utf-8");
+    return content.includes(needle);
+  } catch {
+    return false;
+  }
 }
 
 function hasDep(

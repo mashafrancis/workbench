@@ -1,3 +1,4 @@
+export { AdonisLogo } from "./adonis";
 export { AstroLogo } from "./astro";
 export { BunLogo } from "./bun";
 export { ElysiaLogo } from "./elysia";
@@ -10,3 +11,4 @@ export { KoaLogo } from "./koa";
 export { NestjsLogo } from "./nestjs";
 export { NextLogo } from "./next";
 export { NuxtLogo } from "./nuxt";
+export { TanstackStartLogo } from "./tanstack-start";
