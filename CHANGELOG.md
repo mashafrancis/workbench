@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **`@getworkbench/core`** README updated: full adapter list, Redis auto-discovery, `WorkbenchOptions` table, `createFetchHandler` example, and `ioredis` peer in install instructions.
+- **npm discoverability** — all publishable packages now include `bull-board`, `bull-board-alternative`, and `@bull-board` keywords plus comparison-focused descriptions.
+- **GitHub / npm READMEs** — migration section from `@bull-board/*` to `@getworkbench/*` on root README and every adapter README.
+- **getworkbench.dev** — homepage comparison section with compact feature table, plus "vs Bull Board" in nav and footer.
 
 ## [0.7.0] - 2026-05-27
 

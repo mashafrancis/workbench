@@ -14,7 +14,9 @@ import {
   Twitter,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { ActionButton } from "../components/action-button";
+import { CompareTable } from "../components/blog/compare-table";
 import { CopyCommand } from "../components/copy-command";
 import {
   AdonisLogo,
@@ -41,6 +43,7 @@ import {
   TestMockup,
 } from "../components/mockups";
 import { ThemeToggle } from "../components/theme-toggle";
+import { COMPARISON_ROWS } from "../lib/blog/comparison";
 
 /** Update once the desktop app has a tagged GitHub Release. */
 const MAC_DOWNLOAD_URL =
@@ -55,6 +58,7 @@ const DOCKER_RUN_COMMAND = `docker run --rm -p 3000:3000 \\
 const SPONSORS_URL = "https://github.com/sponsors/pontusab";
 const TWITTER_URL = "https://x.com/pontusab";
 const DOCS_URL = "https://github.com/pontusab/workbench#readme";
+const COMPARISON_URL = "/blog/workbench-vs-bull-board";
 const INSTALL_COMMAND = "npx @getworkbench/cli init";
 
 /**
@@ -273,6 +277,8 @@ export default function Page() {
 
       <BuiltForDevs />
 
+      <ComparisonSection />
+
       <InstallSection />
 
       <Footer />
@@ -307,6 +313,12 @@ function Nav() {
         >
           Blog
         </a>
+        <Link
+          href={COMPARISON_URL}
+          className="hidden transition hover:text-[color:var(--color-foreground)] md:inline"
+        >
+          vs Bull Board
+        </Link>
         <a
           href={DOCS_URL}
           target="_blank"
@@ -624,6 +636,48 @@ function BuiltForDevs() {
 }
 
 /* -------------------------------------------------------------------------- */
+/* bull-board comparison                                                      */
+/* -------------------------------------------------------------------------- */
+
+function ComparisonSection() {
+  return (
+    <section
+      id="compare"
+      className="scroll-mt-16 border-t border-[color:var(--color-border)]/60 px-6 py-20 md:px-10 md:py-28"
+    >
+      <div className="mx-auto max-w-6xl">
+        <div className="max-w-2xl">
+          <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-[color:var(--color-muted-foreground)]">
+            vs Bull Board
+          </div>
+          <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight md:text-4xl">
+            The modern bull-board alternative for BullMQ.
+          </h2>
+          <p className="mt-4 text-balance text-base leading-relaxed text-[color:var(--color-muted-foreground)]">
+            Bull Board is the dashboard everyone already knows. Workbench covers
+            the same Redis queues with thirteen first-party adapters, FlowProducer
+            DAGs, error triage, and a keyboard-driven UI — plus a native macOS app
+            and standalone Docker image.
+          </p>
+          <p className="mt-4">
+            <Link
+              href={COMPARISON_URL}
+              className="text-sm font-medium text-[color:var(--color-foreground)] underline decoration-[color:var(--color-border)] underline-offset-4 transition hover:decoration-[color:var(--color-foreground)]"
+            >
+              Read the full comparison →
+            </Link>
+          </p>
+        </div>
+
+        <div className="mt-10">
+          <CompareTable rows={COMPARISON_ROWS} compact />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
 /* Install / final CTA                                                        */
 /* -------------------------------------------------------------------------- */
 
@@ -749,6 +803,12 @@ function Footer() {
           >
             Docs
           </a>
+          <Link
+            href={COMPARISON_URL}
+            className="transition hover:text-[color:var(--color-foreground)]"
+          >
+            vs Bull Board
+          </Link>
           <a
             href={SPONSORS_URL}
             target="_blank"

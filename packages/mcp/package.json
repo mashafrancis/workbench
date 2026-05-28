@@ -1,7 +1,7 @@
 {
   "name": "@getworkbench/mcp",
   "version": "0.5.1",
-  "description": "Model Context Protocol server for Workbench — let LLMs (Cursor, Claude Desktop, Zed, Continue.dev) inspect, debug, and operate your BullMQ queues through your running Workbench dashboard.",
+  "description": "Model Context Protocol server for Workbench — let LLMs inspect and operate BullMQ queues. Alternative to wiring bull-board into your AI workflow.",
   "type": "module",
   "bin": {
     "workbench-mcp": "./dist/index.js"
@@ -37,18 +37,26 @@
     "model-context-protocol",
     "bullmq",
     "workbench",
+    "getworkbench",
+    "dashboard",
     "ai",
     "llm",
     "cursor",
     "claude",
     "redis",
-    "queue"
+    "queue",
+    "jobs",
+    "background-jobs",
+    "bull-board",
+    "bull-board-alternative",
+    "@bull-board",
+    "monitoring"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pontusab/workbench.git",
     "directory": "packages/mcp"
   },
-  "homepage": "https://github.com/pontusab/workbench/tree/main/packages/mcp#readme",
+  "homepage": "https://getworkbench.dev",
   "license": "MIT"
 }

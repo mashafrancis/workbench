@@ -10,6 +10,12 @@ Koa adapter for [Workbench](https://getworkbench.dev) — a beautiful, open-sour
 
 Mounts as a single middleware on your existing Koa app. No separate service.
 
+## Migrating from bull-board?
+
+Replace `@bull-board/koa` with `@getworkbench/koa` — same Redis, same queues, no schema change. Remove the old bull-board mount, then run `npx @getworkbench/cli init` or follow the install steps below.
+
+Full comparison: [Workbench vs Bull Board](https://getworkbench.dev/blog/workbench-vs-bull-board)
+
 ## Install
 
 ```bash

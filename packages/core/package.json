@@ -1,7 +1,7 @@
 {
   "name": "@getworkbench/core",
   "version": "0.7.1",
-  "description": "Core of Workbench — QueueManager, API router, and bundled UI.",
+  "description": "Core of Workbench — QueueManager, API router, and bundled UI. Modern alternative to `@bull-board/api`.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -91,5 +91,27 @@
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "keywords": [
+    "bullmq",
+    "workbench",
+    "getworkbench",
+    "queue",
+    "dashboard",
+    "redis",
+    "jobs",
+    "background-jobs",
+    "job-queue",
+    "bull-board",
+    "bull-board-alternative",
+    "@bull-board",
+    "monitoring"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pontusab/workbench.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://getworkbench.dev",
+  "license": "MIT"
 }

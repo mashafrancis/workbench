@@ -10,6 +10,12 @@ Elysia adapter for [Workbench](https://getworkbench.dev) — a beautiful, open-s
 
 Mounts as a route in your existing Elysia app. No separate service.
 
+## Migrating from bull-board?
+
+Replace `@bull-board/elysia` with `@getworkbench/elysia` — same Redis, same queues, no schema change. Remove the old bull-board mount, then run `npx @getworkbench/cli init` or follow the install steps below.
+
+Full comparison: [Workbench vs Bull Board](https://getworkbench.dev/blog/workbench-vs-bull-board)
+
 ## Install
 
 ```bash

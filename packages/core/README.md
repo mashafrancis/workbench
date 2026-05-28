@@ -41,6 +41,10 @@ npx @getworkbench/cli init
 - HTTP-agnostic API router — handles `/api/*` requests for the dashboard.
 - Bundled UI — pre-built React app served as a single HTML entrypoint.
 
+## Migrating from bull-board?
+
+Workbench is the modern alternative to `@bull-board/api` + `@bull-board/ui`. Same Redis, same queues — swap the mount and keep your workers unchanged. See the [full comparison](https://getworkbench.dev/blog/workbench-vs-bull-board) or run `npx @getworkbench/cli init`.
+
 ## Install
 
 ```bash

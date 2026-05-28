@@ -20,6 +20,22 @@ Workbench is a modern dashboard for [BullMQ](https://docs.bullmq.io/). Runs jobs
 
 Website: [getworkbench.dev](https://getworkbench.dev)
 
+## Migrating from bull-board?
+
+Workbench is a drop-in alternative with thirteen first-party framework adapters, FlowProducer DAGs, error triage, and a keyboard-driven UI.
+
+| bull-board | Workbench |
+| --- | --- |
+| `@bull-board/express` | `@getworkbench/express` |
+| `@bull-board/fastify` | `@getworkbench/fastify` |
+| `@bull-board/koa` | `@getworkbench/koa` |
+| `@bull-board/nestjs` | `@getworkbench/nestjs` |
+| `@bull-board/hono` | `@getworkbench/hono` |
+| `@bull-board/h3` | `@getworkbench/h3` |
+| `@bull-board/elysia` | `@getworkbench/elysia` |
+
+Run `npx @getworkbench/cli init` to swap the mount in one command. Full comparison: [getworkbench.dev/blog/workbench-vs-bull-board](https://getworkbench.dev/blog/workbench-vs-bull-board)
+
 ## Quick start
 
 ```bash

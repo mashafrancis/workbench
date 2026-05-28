@@ -1,7 +1,7 @@
 {
   "name": "@getworkbench/bun",
   "version": "0.7.0",
-  "description": "Bun.serve adapter for Workbench — drop-in BullMQ dashboard.",
+  "description": "Bun.serve adapter for Workbench — modern BullMQ dashboard with broader framework coverage than bull-board.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -38,5 +38,29 @@
   },
   "engines": {
     "bun": ">=1.1.0"
-  }
+  },
+  "keywords": [
+    "bullmq",
+    "workbench",
+    "getworkbench",
+    "bun",
+    "bun.serve",
+    "queue",
+    "dashboard",
+    "redis",
+    "jobs",
+    "background-jobs",
+    "job-queue",
+    "bull-board",
+    "bull-board-alternative",
+    "@bull-board",
+    "monitoring"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pontusab/workbench.git",
+    "directory": "packages/bun"
+  },
+  "homepage": "https://getworkbench.dev",
+  "license": "MIT"
 }

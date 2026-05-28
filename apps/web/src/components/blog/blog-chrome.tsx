@@ -10,6 +10,7 @@ interface BlogChromeProps {
 
 const GITHUB_URL = "https://github.com/pontusab/workbench";
 const SPONSORS_URL = "https://github.com/sponsors/pontusab";
+const COMPARISON_URL = "/blog/workbench-vs-bull-board";
 
 /**
  * Shared header + footer used by both the blog index and individual post
@@ -49,6 +50,12 @@ export function BlogChrome({ children }: BlogChromeProps) {
             className="hidden transition hover:text-[color:var(--color-foreground)] md:inline"
           >
             Blog
+          </Link>
+          <Link
+            href={COMPARISON_URL}
+            className="hidden transition hover:text-[color:var(--color-foreground)] md:inline"
+          >
+            vs Bull Board
           </Link>
           <a
             href={GITHUB_URL}

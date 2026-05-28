@@ -8,6 +8,10 @@
 
 One-command setup for [Workbench](https://getworkbench.dev) — a beautiful, open-source BullMQ dashboard for modern Node apps.
 
+## Migrating from bull-board?
+
+Run `npx @getworkbench/cli init` to remove bull-board wiring and scaffold Workbench in one step. See the [Workbench vs Bull Board](https://getworkbench.dev/blog/workbench-vs-bull-board) comparison.
+
 ## Quick start
 
 In your existing Hono project:

@@ -10,6 +10,12 @@ NestJS adapter for [Workbench](https://getworkbench.dev) — a beautiful, open-s
 
 Mounts as a single call inside your `main.ts`. Works on both the Express (default) and Fastify NestJS platforms.
 
+## Migrating from bull-board?
+
+Replace `@bull-board/nestjs` with `@getworkbench/nestjs` — same Redis, same queues, no schema change. Remove the old bull-board mount, then run `npx @getworkbench/cli init` or follow the install steps below.
+
+Full comparison: [Workbench vs Bull Board](https://getworkbench.dev/blog/workbench-vs-bull-board)
+
 ## Install
 
 ```bash

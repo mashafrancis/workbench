@@ -10,6 +10,12 @@ TanStack Start adapter for [Workbench](https://getworkbench.dev) — a beautiful
 
 Mounts on TanStack Start server routes using the web-standard `Request` / `Response` API.
 
+## Migrating from bull-board?
+
+Workbench covers the same BullMQ use case with a modern UI, broader framework support, and a one-command install. Remove your `@bull-board/*` packages and run `npx @getworkbench/cli init`.
+
+Full comparison: [Workbench vs Bull Board](https://getworkbench.dev/blog/workbench-vs-bull-board)
+
 ## Install
 
 ```bash

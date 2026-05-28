@@ -1,7 +1,7 @@
 {
   "name": "@getworkbench/adonis",
   "version": "0.7.0",
-  "description": "AdonisJS adapter for Workbench — drop-in BullMQ dashboard.",
+  "description": "AdonisJS adapter for Workbench — modern BullMQ dashboard with broader framework coverage than bull-board.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -39,5 +39,29 @@
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "keywords": [
+    "bullmq",
+    "workbench",
+    "getworkbench",
+    "adonis",
+    "adonisjs",
+    "queue",
+    "dashboard",
+    "redis",
+    "jobs",
+    "background-jobs",
+    "job-queue",
+    "bull-board",
+    "bull-board-alternative",
+    "@bull-board",
+    "monitoring"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pontusab/workbench.git",
+    "directory": "packages/adonis"
+  },
+  "homepage": "https://getworkbench.dev",
+  "license": "MIT"
 }

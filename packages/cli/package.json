@@ -1,7 +1,7 @@
 {
   "name": "@getworkbench/cli",
   "version": "0.5.0",
-  "description": "One-command setup for Workbench — `npx @getworkbench/cli init`",
+  "description": "One-command setup for Workbench — scaffold a bull-board replacement with `npx @getworkbench/cli init`.",
   "type": "module",
   "bin": {
     "workbench": "./dist/index.js",
@@ -34,5 +34,29 @@
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "keywords": [
+    "bullmq",
+    "workbench",
+    "getworkbench",
+    "cli",
+    "scaffold",
+    "init",
+    "npx",
+    "migrate",
+    "queue",
+    "dashboard",
+    "redis",
+    "bull-board",
+    "bull-board-alternative",
+    "@bull-board",
+    "monitoring"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pontusab/workbench.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://getworkbench.dev",
+  "license": "MIT"
 }

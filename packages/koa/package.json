@@ -1,7 +1,7 @@
 {
   "name": "@getworkbench/koa",
   "version": "0.7.0",
-  "description": "Koa adapter for Workbench — drop-in BullMQ dashboard.",
+  "description": "Koa adapter for Workbench — modern BullMQ dashboard, drop-in alternative to `@bull-board/koa`.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -40,5 +40,28 @@
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "keywords": [
+    "bullmq",
+    "workbench",
+    "getworkbench",
+    "koa",
+    "queue",
+    "dashboard",
+    "redis",
+    "jobs",
+    "background-jobs",
+    "job-queue",
+    "bull-board",
+    "bull-board-alternative",
+    "@bull-board",
+    "monitoring"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pontusab/workbench.git",
+    "directory": "packages/koa"
+  },
+  "homepage": "https://getworkbench.dev",
+  "license": "MIT"
 }

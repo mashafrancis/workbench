@@ -12,6 +12,12 @@ Works with any framework built on h3 — standalone h3, [Nitro](https://nitro.un
 
 > Using **Nuxt**? Install [`@getworkbench/nuxt`](../nuxt) instead — same engine, Nuxt-specific docs and CLI scaffolding.
 
+## Migrating from bull-board?
+
+Replace `@bull-board/h3` with `@getworkbench/h3` — same Redis, same queues, no schema change. Remove the old bull-board mount, then run `npx @getworkbench/cli init` or follow the install steps below.
+
+Full comparison: [Workbench vs Bull Board](https://getworkbench.dev/blog/workbench-vs-bull-board)
+
 ## Install
 
 ```bash

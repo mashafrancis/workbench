@@ -1,7 +1,7 @@
 {
   "name": "@getworkbench/nuxt",
   "version": "0.7.0",
-  "description": "Nuxt (Nitro/h3) adapter for Workbench — drop-in BullMQ dashboard.",
+  "description": "Nuxt (Nitro/h3) adapter for Workbench — modern BullMQ dashboard with broader framework coverage than bull-board.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -39,5 +39,30 @@
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "keywords": [
+    "bullmq",
+    "workbench",
+    "getworkbench",
+    "nuxt",
+    "nitro",
+    "h3",
+    "queue",
+    "dashboard",
+    "redis",
+    "jobs",
+    "background-jobs",
+    "job-queue",
+    "bull-board",
+    "bull-board-alternative",
+    "@bull-board",
+    "monitoring"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pontusab/workbench.git",
+    "directory": "packages/nuxt"
+  },
+  "homepage": "https://getworkbench.dev",
+  "license": "MIT"
 }

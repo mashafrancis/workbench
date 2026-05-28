@@ -10,6 +10,12 @@ Fastify adapter for [Workbench](https://getworkbench.dev) — a beautiful, open-
 
 Mounts as a plugin on your existing Fastify app. No separate service.
 
+## Migrating from bull-board?
+
+Replace `@bull-board/fastify` with `@getworkbench/fastify` — same Redis, same queues, no schema change. Remove the old bull-board mount, then run `npx @getworkbench/cli init` or follow the install steps below.
+
+Full comparison: [Workbench vs Bull Board](https://getworkbench.dev/blog/workbench-vs-bull-board)
+
 ## Install
 
 ```bash

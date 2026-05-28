@@ -10,6 +10,12 @@ AdonisJS adapter for [Workbench](https://getworkbench.dev) — a beautiful, open
 
 Works with AdonisJS 6 and 7. Mounts as catch-all routes in your existing Adonis app.
 
+## Migrating from bull-board?
+
+Workbench covers the same BullMQ use case with a modern UI, broader framework support, and a one-command install. Remove your `@bull-board/*` packages and run `npx @getworkbench/cli init`.
+
+Full comparison: [Workbench vs Bull Board](https://getworkbench.dev/blog/workbench-vs-bull-board)
+
 ## Install
 
 ```bash
